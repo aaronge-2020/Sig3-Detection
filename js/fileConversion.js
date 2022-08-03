@@ -479,7 +479,7 @@ function formatMatrixForPrediction(matrix){
 
 function scaleXGBoostPredictions(x, min, max){
 
-    return (x - min(x)) / (max(x) - min(x))
+    return (x - min) / (max - min)
 }
 
 async function generatePredictions() {
