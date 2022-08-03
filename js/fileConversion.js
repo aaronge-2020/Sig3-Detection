@@ -477,6 +477,11 @@ function formatMatrixForPrediction(matrix){
     return data;
 }
 
+function scaleXGBoostPredictions(x, min, max){
+
+    return (x - min(x)) / (max(x) - min(x))
+}
+
 async function generatePredictions() {
 
     if (mutationalSpectrumMatrix == null) {
@@ -514,6 +519,7 @@ async function generatePredictions() {
         const scorer = await Scorer.create(json);
 
         predicted_prob = await scorer.score(data);
+        predicted_prob = scaleXGBoostPredictions(predicted_prob, 0.4999981, 0.5000019);
 
     } else if (modelType == "3") {
         data = Object.values(mutSpec);
