@@ -52,6 +52,8 @@ Each of the four machine-learning models tested (XGBoost, Neural Network, K-near
 
 There are three steps outlined in this workflow pipeline: 
 
-1. The uploading of a MAF file or a mutational spectrum matrix. 
+1. The uploading of a MAF file or a mutational spectrum matrix. To see the required file format for the upload, please examine provided in the `Data/Example Files/' folder. 
 2. The comparison of the uploaded data and the training dataset. If the sample tested is an outlier datapoint, whose distribution falls outside of the training dataset's, then one should have less confidence in the model's predictive powers. 
 3. Select a machine-learning model and obtain a prediction. 
+
+
