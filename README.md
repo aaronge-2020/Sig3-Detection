@@ -40,8 +40,18 @@ The jupyter notebook `Scripts/Dataset Preprocessing/Consuming and Preparing MSK-
 
 ### Hyperparameter tuning
 
+Run through the scripts in `Scripts/Hyperparameter Tuning/` to retune each machine learning model's hyperparameters. 
+
 ### Model Evaluation
+
+The jupyter notebook `Scripts/Main.ipynb` runs 10-fold-cross-validation on each of the four machine-learning models tested: XGBoost, Neural Network, K-nearest-neighbors, and Logistic Regression. This is done to pick out the optimal hyperparameters to use in the final deployed model. 
 
 ### Model Deployment 
 
-https://aaronge-2020.github.io/Sig3-Detection/
+Each of the four machine-learning models tested (XGBoost, Neural Network, K-nearest-neighbors, and Logistic Regression) is ready for use at the [GitHub pages](https://aaronge-2020.github.io/Sig3-Detection/) website here: https://aaronge-2020.github.io/Sig3-Detection/
+
+There are three steps outlined in this workflow pipeline: 
+
+1. The uploading of a MAF file or a mutational spectrum matrix. 
+2. The comparison of the uploaded data and the training dataset. If the sample tested is an outlier datapoint, whose distribution falls outside of the training dataset's, then one should have less confidence in the model's predictive powers. 
+3. Select a machine-learning model and obtain a prediction. 
