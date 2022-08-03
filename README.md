@@ -30,7 +30,7 @@ The jupyter notebook `Scripts/Dataset Preprocessing/Consuming and Preparing MSK-
 
 ## Dataset Labeling
 
-### Bootstrap NNLS with [Sigminer] (https://github.com/ShixiangWang/sigminer)
+### Bootstrap NNLS with [Sigminer](https://github.com/ShixiangWang/sigminer)
 
 ## Model Evaluation and Deployment
 
