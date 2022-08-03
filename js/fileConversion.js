@@ -1,6 +1,6 @@
 const userUpload = document.getElementById("fileInput");
 var reader = new FileReader();
-const MODEL_URL = "/js/Models/NN/model.json";
+const MODEL_URL = "./js/Models/NN/model.json";
 var debug = null;
 var progressBar = null;
 var predictionBar = null;
@@ -63,7 +63,7 @@ async function loadTrainData() {
 
     $("#loadUMAP").hide();
 
-    const trainData = Papa.parse("/Data/training_data.csv", {
+    const trainData = Papa.parse("./Data/training_data.csv", {
         header: true,
         download: true,
         dynamicTyping: true,
@@ -81,7 +81,7 @@ async function UMAPProjections(data) {
 
 
     var transformed_data = [];
-    is_sig3 = await d3.csv("/Data/is_sig3_20.csv");
+    is_sig3 = await d3.csv("./Data/is_sig3_20.csv");
 
     const umap = new UMAP({
         nComponents: 3,
