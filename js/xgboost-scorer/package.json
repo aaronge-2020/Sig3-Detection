@@ -1,0 +1,30 @@
+{
+  "name": "xgboost-scorer",
+  "version": "0.0.4",
+  "description": "A pure JavaScript implementation of XGBoost scoring",
+  "author": "Praveen Sampath <praveensampath2508@gmail.com>",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prvnsmpth/xgboost-scorer"
+  },
+  "keywords": [
+    "xgboost"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/prvnsmpth/xgboost-scorer/issues"
+  },
+  "homepage": "https://github.com/prvnsmpth/xgboost-scorer",
+  "devDependencies": {
+    "@types/node": "^14.0.5",
+    "typescript": "^3.9.3"
+  },
+  "dependencies": {}
+}
