@@ -127,11 +127,11 @@ async function UMAPProjections(data) {
             x: arrayColumn(transformed.slice(-1), 0), y: arrayColumn(transformed.slice(-1), 1), z: arrayColumn(transformed.slice(-1), 2),
             mode: 'markers',
             marker: {
-                color: 'rgb(127, 127, 127)',
+                color: 'rgb(60, 250, 35)',
                 size: 12,
                 symbol: 'circle',
                 line: {
-                    color: 'rgb(204, 204, 204)',
+                    color: 'rgb(60, 250, 35)',
                     width: 1
                 },
                 opacity: 0.8
@@ -174,9 +174,9 @@ async function UMAPProjections(data) {
 function getColor(data) {
     // enter your conditional coloring code here
     if (data.is_sig3_20 == "FALSE") {
-        return '#0000FF'
+        return '#0080ff'
     }
-    return '#FF0000';
+    return '#ff0048';
 }
 
 
@@ -344,8 +344,6 @@ function parseCSV() {
     })
     
     });
-
-    
 
     Swal.fire({
         icon: 'success',
