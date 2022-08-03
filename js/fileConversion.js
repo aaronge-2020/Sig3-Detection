@@ -334,17 +334,14 @@ function loadFile() {
 
 function parseCSV() {
     var data = d3.csvParse(reader.result);
-    userData = data;
-
-    mutationalSpectrumMatrix = userData.map((sample) =>{
-        
-        return Object.values(sample).splice(0,96).map((sample)=>{
-
-        return Number(sample);
-    })
     
-    });
+    userData = data;
+    mutationalSpectrumMatrix = userData[0]
+    Object.keys(mutationalSpectrumMatrix).map(function(key, index) {
+        mutationalSpectrumMatrix[key] = parseInt(mutationalSpectrumMatrix[key]);
+      });
 
+      
     Swal.fire({
         icon: 'success',
         title: 'Matrix Uploaded',
@@ -352,6 +349,7 @@ function parseCSV() {
         confirmButtonColor: '#2098ce',
 
     });
+
 }
 
 
@@ -401,12 +399,6 @@ async function convertMatrix(data) {
         }
     }
     mutationalSpectrumMatrix = mutationalSpectrum;
-    Object.assign(mutSpec, mutationalSpectrumMatrix);
-    for (key in mutSpec){   
-        mutSpec[key.replace(/[^a-zA-Z ]/g, "")] = mutSpec[key];
-        delete mutSpec[key];
-    }
-
 }
 
 async function getMutationalContext(chromosomeNumber, startPosition) {
@@ -482,6 +474,13 @@ function scaleXGBoostPredictions(x, min, max){
 
 async function generatePredictions() {
 
+
+    Object.assign(mutSpec, mutationalSpectrumMatrix);
+    for (key in mutSpec){   
+        mutSpec[key.replace(/[^a-zA-Z ]/g, "")] = mutSpec[key];
+        delete mutSpec[key];
+    }
+    
     if (mutationalSpectrumMatrix == null) {
         Swal.fire({
             icon: 'error',
