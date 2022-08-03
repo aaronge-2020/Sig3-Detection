@@ -12,7 +12,7 @@
 
 ## Dataset Preprocessing
 
-This section details the Python scripts used to ingest and process data for [mutational signature analysis](https://en.wikipedia.org/wiki/Mutational_signatures), from public datasets in the [International Consortium for Cancer and Genomics (ICGC) Data Portal](https://dcc.icgc.org/), with an emphasis on adherence to [FAIR (Findable, Accessible, Interoperable, and Reusable) principles](https://www.go-fair.org/fair-principles/).
+This section describes the Python scripts used to ingest and process data for [mutational signature analysis](https://en.wikipedia.org/wiki/Mutational_signatures), from public datasets in the [International Consortium for Cancer and Genomics (ICGC) Data Portal](https://dcc.icgc.org/), with an emphasis on adherence to [FAIR (Findable, Accessible, Interoperable, and Reusable) principles](https://www.go-fair.org/fair-principles/).
 
 ### Consuming ICGC Data
 
@@ -28,9 +28,9 @@ The jupyter notebook `Scripts/Dataset Preprocessing/Simulating MSK-IMPACT 410.ip
 ### Consuming MSK-IMPACT data and preparing its mutational spectra matrix 
 The jupyter notebook `Scripts/Dataset Preprocessing/Consuming and Preparing MSK-IMPACT Data.ipynb` shows how to use the [cBioPortal web API](https://www.cbioportal.org/webAPI) to download MSK-IMPACT data from the 2017 paper: [Mutational landscape of metastatic cancer revealed from prospective clinical sequencing of 10,000 patients](https://pubmed.ncbi.nlm.nih.gov/28481359/). The downloaded data is then converted into a mutational spectra matrix and stored at `Data/MSK-Impact/Panel/`.
 
-### Dataset Labeling
+## Dataset Labeling
 
-
+### Bootstrap NNLS with [Sigminer] (https://github.com/ShixiangWang/sigminer)
 
 ## Model Evaluation and Deployment
 
