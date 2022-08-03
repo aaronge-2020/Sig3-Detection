@@ -32,6 +32,10 @@ The jupyter notebook `Scripts/Dataset Preprocessing/Consuming and Preparing MSK-
 
 ### Bootstrap NNLS with [Sigminer](https://github.com/ShixiangWang/sigminer)
 
+1. Please follow the instructions in the [Sigminer](https://github.com/ShixiangWang/sigminer) repository to set up your R environment to be able to run [Sigminer](https://github.com/ShixiangWang/sigminer). 
+2. Place RScript `Scripts/RScripts/NNLS_Bootstrapping.R` into the repository where the sigminer environment is set up
+3. Follow the instructions in `Scripts/RScripts/NNLS_Bootstrapping.R` to obtain the labels from the WGS dataset
+
 ## Model Evaluation and Deployment
 
 ### Hyperparameter tuning
