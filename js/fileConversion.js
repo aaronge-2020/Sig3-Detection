@@ -586,6 +586,12 @@ async function generatePredictions() {
         predicted_prob = LR_model.predict(data);
     }
 
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Prediction Complete!',
+        confirmButtonColor: '#2098ce',
+    })
     console.log(predicted_prob);
 
     if (predictionBar != null){
