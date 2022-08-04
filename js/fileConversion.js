@@ -6,7 +6,7 @@ var progressBar = null;
 var predictionBar = null;
 var progress = 0;
 var mutSpec = {};
-userData = [];
+userData = null;
 var mutationalSpectrumMatrix = null;
 
 $('#uploadProgress').hide();
@@ -293,7 +293,7 @@ function standardize_trinucleotide(trinucleotide_ref) {
 function loadFile() {
     const file = userUpload.files[0];
 
-    if (typeof file == 'undefined') {
+    if ((typeof file == 'undefined' && userData == null)) {
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -327,6 +327,21 @@ function loadFile() {
             text: 'No File Type Selected!',
             confirmButtonColor: '#2098ce',
         })
+        return;
+    }
+
+    if (userData != null){
+
+        if (userData.columns[0] == "404: Not Found"){
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Invalid URL!',
+                confirmButtonColor: '#2098ce',
+            })
+            return;
+        }
+        convertMatrix(userData);
     }
 
 
@@ -354,9 +369,47 @@ function parseCSV() {
 
 
 function parseMAF() {
+    console.log(reader.result);
     var data = d3.tsvParse(reader.result);
-    convertMatrix(data);
     userData = data;
+    convertMatrix(userData);
+    
+}
+
+function isValidHttpUrl(string) {
+    let url;
+    
+    try {
+      url = new URL(string);
+    } catch (_) {
+      return false;  
+    }
+  
+    return url.protocol === "http:" || url.protocol === "https:";
+  }
+
+  function getDataFromURL(URL){
+    return fetch(URL,
+    {
+    	method: "GET",
+    })
+    .then((response) => response.text())
+    .then((responseData) => {
+      return responseData;
+    })
+    .catch(error => console.warn(error));
+  }
+  
+ async function parseMAFFromURL(URL){
+    if (isValidHttpUrl(URL)){
+        var data = await getDataFromURL(URL)
+        console.log(data);
+        data = d3.tsvParse(data);
+        userData = data;
+    }else{
+        console.log("Invalid URL");
+
+    }
 }
 
 async function convertMatrix(data) {

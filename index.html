@@ -73,21 +73,25 @@
 
                         <p class="text-sm-left fs-subtitle">Step 1: Process your MAF File or Mutational Spectrum</p>
 
+                        <p class="text-sm-left fs-subtitle-instruction">Select a file from your computer:</p>
+
                         <input type="file" id="fileInput" />
+
+                        <p class="text-sm-left fs-subtitle-instruction">OR Specify a URL:</p>
+                        <input type="text" id="fileURL" onchange="parseMAFFromURL(this.value)"/> 
 
                         <p class="text-sm-left fs-subtitle">Step 2: Select your file type and process the file</p>
 
                         <div class="row">
 
-                            <div class="col-8">
+                            <div class="col-9">
                                 <select style="width:100%; height: 100%;" id="fileType" aria-label="Select File Type ">
-                                    <option selected>Choose the uploaded file type</option>
+                                    <option selected>Select file type</option>
                                     <option value="1">Mutational Spectrum</option>
                                     <option value="2">MAF File</option>
                                 </select>
                             </div>
-                            <div class="col-4">
-
+                            <div class="col-3">
                                 <button type="button" class="btn btn-primary float-right"
                                     onclick="loadFile()">Process</button>
                             </div>

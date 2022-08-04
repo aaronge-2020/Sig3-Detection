@@ -124,6 +124,12 @@ body {
     color: #666;
     margin-bottom: 20px;
 }
+.fs-subtitle-instruction {
+    font-weight: normal;
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 10px;
+}
 
 /*progressbar*/
 #progressbar {
