@@ -44,7 +44,7 @@ Run through the scripts in `Scripts/Hyperparameter Tuning/` to retune each machi
 
 ### Model Evaluation
 
-The jupyter notebook `Scripts/Main.ipynb` runs 10-fold-cross-validation on each of the four machine-learning models tested: XGBoost, Neural Network, K-nearest-neighbors, and Logistic Regression. This is done to pick out the optimal hyperparameters to use in the final deployed model. 
+The jupyter notebook `Scripts/Main.ipynb` runs 10-fold-cross-validation on each of the four machine-learning models tested: XGBoost, Neural Network, K-nearest-neighbors, and Logistic Regression. This is done to pick out the optimal hyperparameters to use in the deployed models. 
 
 ### Model Deployment 
 
