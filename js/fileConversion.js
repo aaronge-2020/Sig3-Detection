@@ -523,11 +523,6 @@ function formatMatrixForPrediction(matrix){
 function scaleXGBoostPredictions(x, min, max){
 
     score = (x - min) / (max - min)
-    if (score < 0 ){
-        score = 0;
-    }else if(score>1){
-        score = 1;
-    }
     return score;
 }
 
@@ -598,7 +593,11 @@ async function generatePredictions() {
         text: 'Prediction Complete!',
         confirmButtonColor: '#2098ce',
     })
-    console.log(predicted_prob);
+    if (predicted_prob < 0 ){
+        predicted_prob = 0;
+    }else if(predicted_prob>1){
+        predicted_prob = 1;
+    }
 
     if (predictionBar != null){
         predictionBar.destroy();
