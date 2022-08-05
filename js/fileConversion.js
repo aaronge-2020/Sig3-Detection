@@ -522,7 +522,13 @@ function formatMatrixForPrediction(matrix){
 
 function scaleXGBoostPredictions(x, min, max){
 
-    return (x - min) / (max - min)
+    score = (x - min) / (max - min)
+    if (score < 0 ){
+        score = 0;
+    }else if(score>1){
+        score = 1;
+    }
+    return score;
 }
 
 async function generatePredictions() {
