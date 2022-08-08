@@ -71,7 +71,7 @@ Each of the four machine-learning models tested (XGBoost, Neural Network, K-near
 
 There are three steps outlined in this workflow pipeline: 
 
-1. The uploading of a MAF file or a mutational spectrum matrix. To see the required file format for the upload, please examine the examples provided in the `Data/Example Files/' [folder](https://github.com/aaronge-2020/Sig3-Detection/tree/master/Data/Example%20Files). 
+1. The uploading of a MAF file or a mutational spectrum matrix. To see the required file format for the upload, please examine the examples provided in the `Data/Example Files/` [folder](https://github.com/aaronge-2020/Sig3-Detection/tree/master/Data/Example%20Files). 
 ![Step 1](https://github.com/aaronge-2020/Sig3-Detection/blob/f7841e699f6b2f6029c313057c2cff4b6dcd88f3/Tutorial%20Gifs/01-WebUploadFile.gif)
 2. The comparison of the uploaded data and the training dataset. If the sample tested is an outlier datapoint, whose distribution falls outside of the training dataset's, then one should have less confidence in the model's predictive powers. 
 ![Step 2](https://github.com/aaronge-2020/Sig3-Detection/blob/f7841e699f6b2f6029c313057c2cff4b6dcd88f3/Tutorial%20Gifs/02-WebVisualizeData.gif)
