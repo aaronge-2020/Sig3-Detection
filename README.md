@@ -40,7 +40,9 @@ The jupyter notebook `Scripts/Dataset Preprocessing/Consuming and Preparing MSK-
 
 ### Hyperparameter tuning
 
-Run through the scripts in `Scripts/Hyperparameter Tuning/` to retune each machine learning model's hyperparameters. 
+Run through the scripts in `Scripts/Hyperparameter Tuning/` to retune each machine learning model's hyperparameters. To step up these scripts in a Google Colab environment, you can follow these steps: 
+
+1. Open and make a copy of the corresponding notebook for the model that you want to tune: [Neural Network] (https://colab.research.google.com/drive/1ns1MBHhfDWpqFqNLXjO9d5fJTTimdA7Y?usp=sharing), [K-nearest-neighbors](https://colab.research.google.com/drive/1awJSktVhQMPcU7U0hL6ht2mPUrz4N_TG?usp=sharing), [XGBoost](https://colab.research.google.com/drive/1aU2_uoEAS45562M0eo_Qr_XtRdbnTTG1?usp=sharing)
 
 ### Model Evaluation
 
