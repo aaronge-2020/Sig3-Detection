@@ -44,7 +44,7 @@ Run through the scripts in `Scripts/Hyperparameter Tuning/` to retune each machi
 
 1. Download a copy of this GitHub repository onto your local machine and unzip it.
 ![Step 1](https://github.com/aaronge-2020/Sig3-Detection/blob/10bfcaa47392b6e8f9eb21bc89277f174257cf99/Tutorial%20Gifs/01-Download%20Repo.gif)
-3. Open and make a copy of the corresponding notebook for the model that you want to tune: [Neural Network](https://colab.research.google.com/drive/1ns1MBHhfDWpqFqNLXjO9d5fJTTimdA7Y?usp=sharing), [K-nearest-neighbors](https://colab.research.google.com/drive/1awJSktVhQMPcU7U0hL6ht2mPUrz4N_TG?usp=sharing), [XGBoost](https://colab.research.google.com/drive/1aU2_uoEAS45562M0eo_Qr_XtRdbnTTG1?usp=sharing). For this example, I will be tuning the Neural Network Model. 
+3. Open and make a copy of the corresponding notebook for the model that you want to tune: [Neural Network](https://colab.research.google.com/drive/1ns1MBHhfDWpqFqNLXjO9d5fJTTimdA7Y?usp=sharing), [K-nearest-neighbors](https://colab.research.google.com/drive/1awJSktVhQMPcU7U0hL6ht2mPUrz4N_TG?usp=sharing), [XGBoost](https://colab.research.google.com/drive/1aU2_uoEAS45562M0eo_Qr_XtRdbnTTG1?usp=sharing). 
 4. (Optional) Speed up the training process by enabling GPU usage.
 ![Step 4](https://github.com/aaronge-2020/Sig3-Detection/blob/727a2088613e22edd0e188694c95a9b669618af9/Tutorial%20Gifs/04-Enable%20GPU.gif)
 6. Navigate to the folder where the github repository is downloaded onto your machine and upload `./Sig3-Detection/-master/Data/train_test_indices.npy` and `./Sig3-Detection/-master/Data/MSK_Impact_train/BRCA_MSK_sigminer_wilcoxon_test_p_val_final.csv` to the Google Colab Notebook. 
