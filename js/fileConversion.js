@@ -490,7 +490,7 @@ async function convertMatrix(data) {
             
             console.log(mutationType, position);
 
-            if ((variantType == "SNP" || variantType == "single base substitution") && !mutationType.includes("N")) {
+            if ((variantType == "SNP" || variantType == "single base substitution") && !mutationType.includes("N") && !mutationType.includes("U")) {
                 mutationalSpectrum[mutationType] = Number(mutationalSpectrum[mutationType]) + Number(1);
 
                 progress = (i + 1) / data.length;
@@ -600,6 +600,7 @@ async function generatePredictions() {
 
 
     var data = mutSpec;
+
     var type = document.getElementById("modelSelection");
     var modelType = type.value;
 
@@ -609,6 +610,8 @@ async function generatePredictions() {
     $('#results_text').show();
 
     if (modelType == "1") {
+        console.log("neural network model");
+
         data = formatMatrixForPrediction(mutSpec);
 
         NN = await loadNNModel();
@@ -619,25 +622,33 @@ async function generatePredictions() {
 
         console.log("xgboost model");
         var json = await $.getJSON("./js/xgboost-scorer/xgb.model.json");
-        
         const scorer = await Scorer.create(json);
 
         predicted_prob = await scorer.score(data);
         predicted_prob = scaleXGBoostPredictions(predicted_prob, 0.4999981, 0.5000019);
 
     } else if (modelType == "3") {
+        console.log("KNN model");
         data = Object.values(mutSpec);
-
         var json_knn = await d3.json("./js/Models/knn_algorithm.json");
         var knn_load = ML.KNN.load(json_knn);
         predicted_prob = knn_load.predict(data);
 
-    } else {
+    } else if (modelType == "4") {
+        console.log("LR model");
         data = Object.values(mutSpec);
         data = new ML.Matrix([data])
         var json = await $.getJSON("./js/Models/LR.json");
         LR_model = mlLogisticRegression.load(json);
-        predicted_prob = LR_model.predict(data);
+        predicted_prob = LR_model.classifiers[0].testScores(data)[0];
+    }else{
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No Model Selected!',
+            confirmButtonColor: '#2098ce',
+        });
+        return;
     }
 
     Swal.fire({
@@ -686,7 +697,7 @@ async function generatePredictions() {
     bar.text.style.fontSize = '2rem';
 
     predictionBar = bar;
-
+    console.log(predicted_prob);
     predictionBar.animate(predicted_prob);  // Number from 0.0 to 1.0
 
 }
