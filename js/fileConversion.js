@@ -83,6 +83,17 @@ async function UMAPProjections(data) {
     var transformed_data = [];
     is_sig3 = await d3.csv("./Data/is_sig3_20.csv");
 
+    var sig3 = []
+    var not_sig3 = []
+    for (let i = 0; i < is_sig3.length; i++) {
+        if (Object.values(is_sig3[i])=="TRUE"){
+            sig3.push(i);
+        }else{
+            not_sig3.push(i);
+        }    
+    }
+
+
     const umap = new UMAP({
         nComponents: 3,
         nNeighbors: 15,
@@ -107,12 +118,14 @@ async function UMAPProjections(data) {
         });
 
 
-        var training_data = {
-            x: arrayColumn(transformed.slice(0, -1), 0), y: arrayColumn(transformed.slice(0, -1), 1), z: arrayColumn(transformed.slice(0, -1), 2),
+        var training_data_sig3 = {
+            x: sig3.map(x=>arrayColumn(transformed.slice(0, -1), 0)[x]), 
+            y: sig3.map(x=>arrayColumn(transformed.slice(0, -1), 1)[x]), 
+            z: sig3.map(x=>arrayColumn(transformed.slice(0, -1), 2)[x]),
             mode: 'markers',
             marker: {
                 size: 6,
-                color: is_sig3.map(d => getColor(d)),
+                color: "#ff0048",
                 line: {
                     color: 'rgba(217, 217, 217, 0.14)',
                     width: 0.5
@@ -120,11 +133,31 @@ async function UMAPProjections(data) {
                 opacity: 0.8
             },
             type: 'scatter3d',
-            name: 'Training Data'
+            name: 'Sig3+'
+        };
+
+        var training_data_not_sig3 = {
+            x: not_sig3.map(x=>arrayColumn(transformed.slice(0, -1), 0)[x]), 
+            y: not_sig3.map(x=>arrayColumn(transformed.slice(0, -1), 1)[x]), 
+            z: not_sig3.map(x=>arrayColumn(transformed.slice(0, -1), 2)[x]),
+            mode: 'markers',
+            marker: {
+                size: 6,
+                color: "#0080ff",
+                line: {
+                    color: 'rgba(217, 217, 217, 0.14)',
+                    width: 0.5
+                },
+                opacity: 0.8
+            },
+            type: 'scatter3d',
+            name: 'Sig3-'
         };
 
         var userData = {
-            x: arrayColumn(transformed.slice(-1), 0), y: arrayColumn(transformed.slice(-1), 1), z: arrayColumn(transformed.slice(-1), 2),
+            x: arrayColumn(transformed.slice(-1), 0), 
+            y: arrayColumn(transformed.slice(-1), 1), 
+            z: arrayColumn(transformed.slice(-1), 2),
             mode: 'markers',
             marker: {
                 color: 'rgb(60, 250, 35)',
@@ -140,19 +173,21 @@ async function UMAPProjections(data) {
             name: 'Your Data'
 
         };
-        transformed_data.push(training_data, userData);
+        transformed_data.push(training_data_sig3,training_data_not_sig3, userData);
 
     } else {
         const embedding = await umap.fitAsync(data, epochNumber => {
             // check progress and give user feedback, or return `false` to stop
         });
 
-        var training_data = {
-            x: arrayColumn(embedding, 0), y: arrayColumn(embedding, 1), z: arrayColumn(embedding, 2),
+        var training_data_sig3 = {
+            x: sig3.map(x=>arrayColumn(embedding, 0)[x]), 
+            y: sig3.map(x=>arrayColumn(embedding, 1)[x]), 
+            z: sig3.map(x=>arrayColumn(embedding, 2)[x]),
             mode: 'markers',
             marker: {
                 size: 6,
-                color: is_sig3.map(d => getColor(d)),
+                color: '#ff0048',
                 line: {
                     color: 'rgba(217, 217, 217, 0.14)',
                     width: 0.5
@@ -160,9 +195,27 @@ async function UMAPProjections(data) {
                 opacity: 0.8
             },
             type: 'scatter3d',
-            name: 'Training Data'
+            name: 'Sig3+'
         };
-        transformed_data.push(training_data);
+
+        var training_data_not_sig3 = {
+            x: not_sig3.map(x=>arrayColumn(embedding, 0)[x]), 
+            y: not_sig3.map(x=>arrayColumn(embedding, 1)[x]), 
+            z: not_sig3.map(x=>arrayColumn(embedding, 2)[x]),
+            mode: 'markers',
+            marker: {
+                size: 6,
+                color: "#0080ff",
+                line: {
+                    color: 'rgba(217, 217, 217, 0.14)',
+                    width: 0.5
+                },
+                opacity: 0.8
+            },
+            type: 'scatter3d',
+            name: 'Sig3-'
+        };
+        transformed_data.push(training_data_not_sig3, training_data_sig3);
     }
     $('#loadingUMAP').hide();
 
