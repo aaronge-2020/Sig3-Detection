@@ -5,15 +5,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/style.css">
-    <script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"
-  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-  crossorigin="anonymous"></script>
-    <script
-  src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
-  integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0="
-  crossorigin="anonymous"></script>
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
+        integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.33.1/plotly.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
@@ -22,7 +18,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
     <script src="./js/papaparse.min.js"></script>
-    <script data-main = "js/config" src="./js/umap-js.min.js"></script>
+    <script data-main="js/config" src="./js/umap-js.min.js"></script>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -30,18 +26,18 @@
 
 
     <script type="text/javascript" src="https://unpkg.com/ts-browser"></script>
-    
+
     <script type="module" src="./js/XGBoost-loader.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
-    
+
     <script type="module">
         import mlLogisticRegression from 'https://cdn.skypack.dev/ml-logistic-regression';
         import mlMatrix from 'https://cdn.skypack.dev/ml-matrix';
 
         window.mlLogisticRegression = mlLogisticRegression;
         window.mlMatrix = mlMatrix;
-      </script>
+    </script>
 
 </head>
 
@@ -78,7 +74,16 @@
                         <input type="file" id="fileInput" />
 
                         <p class="text-sm-left fs-subtitle-instruction">OR Specify a URL:</p>
-                        <input type="text" id="fileURL" onchange="parseMAFFromURL(this.value)"/> 
+                        <!-- The text field -->
+
+
+                        <a onclick="copyToClipboard()"
+                            href="#">
+                            Copy Example URl to Clipboard</a>
+
+
+
+                        <input type="text" id="fileURL" onchange="parseMAFFromURL(this.value)" />
 
                         <p class="text-sm-left fs-subtitle">Step 2: Select your file type and process the file</p>
 
@@ -113,13 +118,13 @@
                     </div>
 
                     <div id="loadingUMAP">
-                    <br>
-                    <div class="loader" style = "margin:auto"></div>
-                    <br>
+                        <br>
+                        <div class="loader" style="margin:auto"></div>
+                        <br>
                     </div>
 
                     <div class="container">
-                        
+
                         <div class="row justify-content-md-center" id="umapGraph"></div>
 
                         <p> *Note that the blue and red data points are from the training dataset</p>
@@ -143,8 +148,8 @@
                             </select>
                         </div>
 
-                        <div id ="results_text" class="row justify-content-md-center">
-                            <h5 class="h5" id ="predictedProb">Your Predicted Probability is: </h1>
+                        <div id="results_text" class="row justify-content-md-center">
+                            <h5 class="h5" id="predictedProb">Your Predicted Probability is: </h1>
                         </div>
 
                         <div class="row justify-content-md-center">
@@ -153,7 +158,7 @@
 
                         </div>
 
-                        
+
                     </div>
                     <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
                     <input type="button" id="generatePrediction" class="submit action-button" value="Predict"

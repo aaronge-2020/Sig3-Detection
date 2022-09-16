@@ -80,3 +80,10 @@ $(".previous").click(function () {
 $(".submit").click(function () {
 	return false;
 })
+
+function copyToClipboard() {
+	
+	 // Copy the text inside the text field
+	navigator.clipboard.writeText('https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/Example%20Files/Sample%20MAFs/DO224865.maf');
+
+  }
