@@ -533,7 +533,7 @@ async function getMutationalContext(chromosomeNumber, startPosition) {
 
 function moveProgressBar() {
 
-    var id = setInterval(frame, 5000);
+    var id = setInterval(frame, 1000);
     function frame() {
         if (progress == 1.0) {
             progressBar.animate(progress);
