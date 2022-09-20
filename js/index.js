@@ -81,9 +81,19 @@ $(".submit").click(function () {
 	return false;
 })
 
-function copyToClipboard() {
+function exampleMAF() {
 	
 	 // Copy the text inside the text field
-	navigator.clipboard.writeText('https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/Example%20Files/Sample%20MAFs/DO224865.maf');
-
+	 var url = document.getElementById("fileURL");
+	 url.value = 'https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/Example%20Files/Sample%20MAFs/DO224865.maf';
+	 parseMAFFromURL(url.value);
   }
+
+
+  function exampleCSV() {
+	
+	// Copy the text inside the text field
+	var url = document.getElementById("fileURL");
+	url.value = 'https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/Example%20Files/Sample%20Mutational%20Spectrum/sample.csv';
+	parseMutSpecFromURL(url.value);
+ }

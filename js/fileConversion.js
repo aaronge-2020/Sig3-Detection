@@ -50,7 +50,7 @@ function initializeProgressBar() {
     bar.text.style.fontSize = '2rem';
 
     progressBar = bar;
-    
+
 
 }
 
@@ -86,11 +86,11 @@ async function UMAPProjections(data) {
     var sig3 = []
     var not_sig3 = []
     for (let i = 0; i < is_sig3.length; i++) {
-        if (Object.values(is_sig3[i])=="TRUE"){
+        if (Object.values(is_sig3[i]) == "TRUE") {
             sig3.push(i);
-        }else{
+        } else {
             not_sig3.push(i);
-        }    
+        }
     }
 
 
@@ -119,9 +119,9 @@ async function UMAPProjections(data) {
 
 
         var training_data_sig3 = {
-            x: sig3.map(x=>arrayColumn(transformed.slice(0, -1), 0)[x]), 
-            y: sig3.map(x=>arrayColumn(transformed.slice(0, -1), 1)[x]), 
-            z: sig3.map(x=>arrayColumn(transformed.slice(0, -1), 2)[x]),
+            x: sig3.map(x => arrayColumn(transformed.slice(0, -1), 0)[x]),
+            y: sig3.map(x => arrayColumn(transformed.slice(0, -1), 1)[x]),
+            z: sig3.map(x => arrayColumn(transformed.slice(0, -1), 2)[x]),
             mode: 'markers',
             marker: {
                 size: 6,
@@ -137,9 +137,9 @@ async function UMAPProjections(data) {
         };
 
         var training_data_not_sig3 = {
-            x: not_sig3.map(x=>arrayColumn(transformed.slice(0, -1), 0)[x]), 
-            y: not_sig3.map(x=>arrayColumn(transformed.slice(0, -1), 1)[x]), 
-            z: not_sig3.map(x=>arrayColumn(transformed.slice(0, -1), 2)[x]),
+            x: not_sig3.map(x => arrayColumn(transformed.slice(0, -1), 0)[x]),
+            y: not_sig3.map(x => arrayColumn(transformed.slice(0, -1), 1)[x]),
+            z: not_sig3.map(x => arrayColumn(transformed.slice(0, -1), 2)[x]),
             mode: 'markers',
             marker: {
                 size: 6,
@@ -155,8 +155,8 @@ async function UMAPProjections(data) {
         };
 
         var userData = {
-            x: arrayColumn(transformed.slice(-1), 0), 
-            y: arrayColumn(transformed.slice(-1), 1), 
+            x: arrayColumn(transformed.slice(-1), 0),
+            y: arrayColumn(transformed.slice(-1), 1),
             z: arrayColumn(transformed.slice(-1), 2),
             mode: 'markers',
             marker: {
@@ -173,7 +173,7 @@ async function UMAPProjections(data) {
             name: 'Your Data'
 
         };
-        transformed_data.push(training_data_sig3,training_data_not_sig3, userData);
+        transformed_data.push(training_data_sig3, training_data_not_sig3, userData);
 
     } else {
         const embedding = await umap.fitAsync(data, epochNumber => {
@@ -181,9 +181,9 @@ async function UMAPProjections(data) {
         });
 
         var training_data_sig3 = {
-            x: sig3.map(x=>arrayColumn(embedding, 0)[x]), 
-            y: sig3.map(x=>arrayColumn(embedding, 1)[x]), 
-            z: sig3.map(x=>arrayColumn(embedding, 2)[x]),
+            x: sig3.map(x => arrayColumn(embedding, 0)[x]),
+            y: sig3.map(x => arrayColumn(embedding, 1)[x]),
+            z: sig3.map(x => arrayColumn(embedding, 2)[x]),
             mode: 'markers',
             marker: {
                 size: 6,
@@ -199,9 +199,9 @@ async function UMAPProjections(data) {
         };
 
         var training_data_not_sig3 = {
-            x: not_sig3.map(x=>arrayColumn(embedding, 0)[x]), 
-            y: not_sig3.map(x=>arrayColumn(embedding, 1)[x]), 
-            z: not_sig3.map(x=>arrayColumn(embedding, 2)[x]),
+            x: not_sig3.map(x => arrayColumn(embedding, 0)[x]),
+            y: not_sig3.map(x => arrayColumn(embedding, 1)[x]),
+            z: not_sig3.map(x => arrayColumn(embedding, 2)[x]),
             mode: 'markers',
             marker: {
                 size: 6,
@@ -345,7 +345,6 @@ function standardize_trinucleotide(trinucleotide_ref) {
 
 function loadFile() {
     const file = userUpload.files[0];
-
     if ((typeof file == 'undefined' && userData == null)) {
         Swal.fire({
             icon: 'error',
@@ -356,18 +355,28 @@ function loadFile() {
         return;
     }
 
+    if (typeof file == 'undefined') {
+        var url = document.getElementById("fileURL");
+        var fileType = url.value.substring(url.value.lastIndexOf(".") + 1);
+    } else {
+        fileName = file.name;
+        var fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
 
-    var type = document.getElementById("fileType");
-    var fileType = type.value;
-
-    if (fileType == "1") {
-        
+    if (fileType == "csv") {
         reader.addEventListener("load", parseCSV, false);
         if (file) {
             reader.readAsText(file);
         }
-
-    } else if (fileType == "2") {
+        Swal.fire({
+            icon: 'success',
+            title: 'Matrix Uploaded',
+            showConfirmButton: true,
+            confirmButtonColor: '#2098ce',
+    
+        });
+        
+    } else if (fileType == "maf") {
         reader.addEventListener("load", parseMAF, false);
         if (file) {
             reader.readAsText(file);
@@ -383,9 +392,9 @@ function loadFile() {
         return;
     }
 
-    if (userData != null){
+    if (userData != null && fileType == "maf") {
 
-        if (userData.columns[0] == "404: Not Found"){
+        if (userData.columns[0] == "404: Not Found") {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -402,14 +411,13 @@ function loadFile() {
 
 function parseCSV() {
     var data = d3.csvParse(reader.result);
-    
+
     userData = data;
     mutationalSpectrumMatrix = userData[0]
-    Object.keys(mutationalSpectrumMatrix).map(function(key, index) {
+    Object.keys(mutationalSpectrumMatrix).map(function (key, index) {
         mutationalSpectrumMatrix[key] = parseInt(mutationalSpectrumMatrix[key]);
-      });
+    });
 
-      
     Swal.fire({
         icon: 'success',
         title: 'Matrix Uploaded',
@@ -420,50 +428,65 @@ function parseCSV() {
 
 }
 
-
 function parseMAF() {
     console.log(reader.result);
     var data = d3.tsvParse(reader.result);
     userData = data;
     convertMatrix(userData);
-    
+
 }
 
 function isValidHttpUrl(string) {
     let url;
-    
-    try {
-      url = new URL(string);
-    } catch (_) {
-      return false;  
-    }
-  
-    return url.protocol === "http:" || url.protocol === "https:";
-  }
 
-  function getDataFromURL(URL){
+    try {
+        url = new URL(string);
+    } catch (_) {
+        return false;
+    }
+
+    return url.protocol === "http:" || url.protocol === "https:";
+}
+
+function getDataFromURL(URL) {
     return fetch(URL,
-    {
-    	method: "GET",
-    })
-    .then((response) => response.text())
-    .then((responseData) => {
-      return responseData;
-    })
-    .catch(error => console.warn(error));
-  }
-  
- async function parseMAFFromURL(URL){
-    if (isValidHttpUrl(URL)){
+        {
+            method: "GET",
+        })
+        .then((response) => response.text())
+        .then((responseData) => {
+            return responseData;
+        })
+        .catch(error => console.warn(error));
+}
+
+async function parseMAFFromURL(URL) {
+    if (isValidHttpUrl(URL)) {
         var data = await getDataFromURL(URL)
         console.log(data);
         data = d3.tsvParse(data);
         userData = data;
-    }else{
+    } else {
         console.log("Invalid URL");
+    }
+    console.log("onchange called");
+}
 
+async function parseMutSpecFromURL(URL) {
+    if (isValidHttpUrl(URL)) {
+        var data = await getDataFromURL(URL)
+        console.log(data);
+        data = d3.csvParse(data);
+        userData = data;
+        mutationalSpectrumMatrix = userData[0]
+        Object.keys(mutationalSpectrumMatrix).map(function (key, index) {
+            mutationalSpectrumMatrix[key] = parseInt(mutationalSpectrumMatrix[key]);
+        });
+    } else {
+        console.log("Invalid URL");
     }
 }
+
 
 async function convertMatrix(data) {
     var elem = document.getElementById("myBar");
@@ -487,7 +510,7 @@ async function convertMatrix(data) {
             fivePrime = sequence[0];
             threePrime = sequence[2];
             mutationType = String(`${fivePrime}[${standardize_substitution(referenceAllele, mutatedTo)}]${threePrime}`).toUpperCase()
-            
+
             console.log(mutationType, position);
 
             if ((variantType == "SNP" || variantType == "single base substitution") && !mutationType.includes("N") && !mutationType.includes("U")) {
@@ -495,7 +518,7 @@ async function convertMatrix(data) {
 
                 progress = (i + 1) / data.length;
 
-                if (progress>0.95){
+                if (progress > 0.95) {
                     progress = 1;
                 }
             }
@@ -560,20 +583,20 @@ function moveProgressBar() {
 }
 
 
-function formatMatrixForPrediction(matrix){
+function formatMatrixForPrediction(matrix) {
 
     matrix = Object.values(matrix);
-    if (typeof(matrix[0].length) != "undefined"){
-        data = tf.reshape(matrix,[matrix.length, 96,1])
+    if (typeof (matrix[0].length) != "undefined") {
+        data = tf.reshape(matrix, [matrix.length, 96, 1])
 
-    }else{
-        data = tf.reshape(matrix,[1, 96,1])
+    } else {
+        data = tf.reshape(matrix, [1, 96, 1])
     }
 
     return data;
 }
 
-function scaleXGBoostPredictions(x, min, max){
+function scaleXGBoostPredictions(x, min, max) {
 
     score = (x - min) / (max - min)
     return score;
@@ -583,11 +606,11 @@ async function generatePredictions() {
 
 
     Object.assign(mutSpec, mutationalSpectrumMatrix);
-    for (key in mutSpec){   
+    for (key in mutSpec) {
         mutSpec[key.replace(/[^a-zA-Z ]/g, "")] = mutSpec[key];
         delete mutSpec[key];
     }
-    
+
     if (mutationalSpectrumMatrix == null) {
         Swal.fire({
             icon: 'error',
@@ -641,7 +664,7 @@ async function generatePredictions() {
         var json = await $.getJSON("./js/Models/LR.json");
         LR_model = mlLogisticRegression.load(json);
         predicted_prob = LR_model.classifiers[0].testScores(data)[0];
-    }else{
+    } else {
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -657,13 +680,13 @@ async function generatePredictions() {
         text: 'Prediction Complete!',
         confirmButtonColor: '#2098ce',
     })
-    if (predicted_prob < 0 ){
+    if (predicted_prob < 0) {
         predicted_prob = 0;
-    }else if(predicted_prob>1){
+    } else if (predicted_prob > 1) {
         predicted_prob = 1;
     }
 
-    if (predictionBar != null){
+    if (predictionBar != null) {
         predictionBar.destroy();
     }
     var bar = new ProgressBar.Circle(results, {

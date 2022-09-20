@@ -77,27 +77,18 @@
                         <!-- The text field -->
 
 
-                        <a onclick="copyToClipboard()"
-                            href="#">
-                            Copy Example URL to Clipboard</a>
+                        <a onclick="exampleMAF()" href="#">
+                            Try an Example MAF</a><br>
+                        <a onclick="exampleCSV()" href="#">
+                            Try an Example Mutational Spectrum</a>
 
+                        <input type="text" id="fileURL" onchange="parseMAFFromURL(this.value)"/>
 
-
-                        <input type="text" id="fileURL" onchange="parseMAFFromURL(this.value)" />
-
-                        <p class="text-sm-left fs-subtitle">Step 2: Select your file type and process the file</p>
+                        <p class="text-sm-left fs-subtitle">Step 2: Process the file</p>
 
                         <div class="row">
-
-                            <div class="col-9">
-                                <select style="width:100%; height: 100%;" id="fileType" aria-label="Select File Type ">
-                                    <option selected>Select file type</option>
-                                    <option value="1">Mutational Spectrum</option>
-                                    <option value="2">MAF File</option>
-                                </select>
-                            </div>
-                            <div class="col-3">
-                                <button type="button" class="btn btn-primary float-right"
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary ml-auto"
                                     onclick="loadFile()">Process</button>
                             </div>
 
@@ -108,7 +99,7 @@
                 </fieldset>
                 <fieldset>
                     <h2 class="fs-title">Confidence Estimation</h2>
-                    <h3 class="fs-subtitle">Obtaining Sample's Similarity with Training Dataset through UMAP Projections
+                    <h3 class="fs-subtitle">Visualization of the Sample(s) and training datset through UMAP projections
                     </h3>
                     <div id="loadUMAP">
                         <br>
