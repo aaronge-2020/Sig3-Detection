@@ -1,6 +1,4 @@
-# Signature 3 Detection
-
-## Check out the deployed models here: [Web-App] (https://aaronge-2020.github.io/Sig3-Detection/)
+# [Signature 3 Detection]((https://aaronge-2020.github.io/Sig3-Detection/))
 
 ## Table of Contents
 - [Signature 3 Detection](#signature-3-detection)
