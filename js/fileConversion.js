@@ -596,14 +596,15 @@ function formatMatrixForPredictionNN(matrix) {
     return data;
 }
 function formatMatrixForPredictionXGB(matrix) {
-    matrix['unknown'] = NaN;
+    data = structuredClone(matrix);
+    data['unknown'] = NaN;
       // Loop through the keys of the original dictionary
-    for (let key in matrix) {
+    for (let key in data) {
         // Convert the value of each key into an array and assign it to the corresponding key in the new dictionary
-        matrix[key] = [{key: matrix[key]}];
+        data[key] = [data[key]];
     }
   
-    return matrix;
+    return data;
 }
 
 function scaleXGBoostPredictions(x, min, max) {
@@ -653,7 +654,6 @@ async function generatePredictions() {
 
     } else if (modelType == "2") {
 
-        console.log("xgboost model");
         data = formatMatrixForPredictionXGB(mutSpec);
         let model = await ydf.loadModelFromUrl("./js/Models/XGBoost/model.zip");
         predicted_prob = model.predict(data);
