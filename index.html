@@ -30,7 +30,11 @@
     <script type="module" src="./js/XGBoost-loader.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
+    <!-- Yggdrasil Decision Forests -->
+    <script src="./ydf/inference.js"></script>
 
+    <!-- JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
     <script type="module">
         import mlLogisticRegression from 'https://cdn.skypack.dev/ml-logistic-regression';
         import mlMatrix from 'https://cdn.skypack.dev/ml-matrix';
@@ -42,6 +46,14 @@
 </head>
 
 <body>
+    <script>
+        let ydf = null;
+        YggdrasilDecisionForests().then(function (m) {
+          ydf = m;
+          console.log("The library is loaded and ready to be used!");
+        });
+        </script>
+
     <nav class="navbar navbar-dark bg-primary">
         <!-- Navbar content -->
         <a class="navbar-brand" href="#">Signature 3 Analyzer</a>

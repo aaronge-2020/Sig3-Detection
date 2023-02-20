@@ -583,7 +583,7 @@ function moveProgressBar() {
 }
 
 
-function formatMatrixForPrediction(matrix) {
+function formatMatrixForPredictionNN(matrix) {
 
     matrix = Object.values(matrix);
     if (typeof (matrix[0].length) != "undefined") {
@@ -594,6 +594,16 @@ function formatMatrixForPrediction(matrix) {
     }
 
     return data;
+}
+function formatMatrixForPredictionXGB(matrix) {
+    matrix['unknown'] = NaN;
+      // Loop through the keys of the original dictionary
+    for (let key in matrix) {
+        // Convert the value of each key into an array and assign it to the corresponding key in the new dictionary
+        matrix[key] = [{key: matrix[key]}];
+    }
+  
+    return matrix;
 }
 
 function scaleXGBoostPredictions(x, min, max) {
@@ -607,7 +617,7 @@ async function generatePredictions() {
 
     Object.assign(mutSpec, mutationalSpectrumMatrix);
     for (key in mutSpec) {
-        mutSpec[key.replace(/[^a-zA-Z ]/g, "")] = mutSpec[key];
+        mutSpec[key.replace(/[^a-zA-Z ]/g, "").toUpperCase()] = mutSpec[key];
         delete mutSpec[key];
     }
 
@@ -635,7 +645,7 @@ async function generatePredictions() {
     if (modelType == "1") {
         console.log("neural network model");
 
-        data = formatMatrixForPrediction(mutSpec);
+        data = formatMatrixForPredictionNN(mutSpec);
 
         NN = await loadNNModel();
 
@@ -644,11 +654,9 @@ async function generatePredictions() {
     } else if (modelType == "2") {
 
         console.log("xgboost model");
-        var json = await $.getJSON("./js/xgboost-scorer/xgb.model.json");
-        const scorer = await Scorer.create(json);
-
-        predicted_prob = await scorer.score(data);
-        predicted_prob = scaleXGBoostPredictions(predicted_prob, 0.4999981, 0.5000019);
+        data = formatMatrixForPredictionXGB(mutSpec);
+        let model = await ydf.loadModelFromUrl("./js/Models/XGBoost/model.zip");
+        predicted_prob = model.predict(data);
 
     } else if (modelType == "3") {
         console.log("KNN model");
