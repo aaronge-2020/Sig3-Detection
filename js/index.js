@@ -44,7 +44,7 @@ $(".next").click(function () {
   );
 });
 
-function previousStep() {
+$(".previous").click(function() {
   if (animating) return false; // Checks if animation is in progress
   animating = true; // If not, animation is in progress
 
@@ -85,7 +85,7 @@ function previousStep() {
       easing: "easeInOutBack",
     }
   );
-}
+});
 
 $(".submit").click(function () {
   // prevent the submit button from causing the form to be submitted

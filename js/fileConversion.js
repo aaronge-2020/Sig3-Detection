@@ -646,12 +646,14 @@ function moveProgressBar() {
 }
 
 function fadeAndDestroyDiv(div) {
-    div.css("transition", "opacity 2s");
+    div.css("transition", "opacity 1.25s");
+    div.css("transition-timing-function", "ease-out");
+
     div.css("opacity", "0");
     setTimeout(function() {
         progressBar.destroy();
         div.css("opacity", "1");
-    }, 2000);
+    }, 1500);
   }
 
 
