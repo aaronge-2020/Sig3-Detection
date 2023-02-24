@@ -359,7 +359,7 @@ function loadFile() {
       parseMutSpecFromURL(URLPassed);
     } else {
       fireErrorMessage(
-        "File Type Must Be .maf for MAF or .csv for mutational spectrum!"
+        "File type must Be .maf for MAF files or .csv for mutational spectra!"
       );
       return;
     }
