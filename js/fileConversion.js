@@ -658,10 +658,12 @@ function fadeAndDestroyDiv(div) {
     div.css("transition-timing-function", "ease-out");
 
     div.css("opacity", "0");
+
+    $("#uploadProgress").slideToggle("slow");
     setTimeout(function() {
         progressBar.destroy();
         div.css("opacity", "1");
-    }, 1500);
+    }, 2000);
   }
 
 
