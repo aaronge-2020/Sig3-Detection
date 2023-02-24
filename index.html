@@ -72,9 +72,9 @@
                 </ul>
                 <!-- fieldsets -->
                 <fieldset>
-                    <button onClick="window.location.reload();window.location.href='';" class="reloadButton" title="Reset">
+                    <a onClick="window.location.reload();" class="reloadButton" href="">
                         <img src="./js/reset.svg" class="btn-icon">
-                    </button>
+                    </a>
                     <h2 class="fs-title">File Upload</h2>
                     <h3 class="fs-subtitle">Please upload your MSK-Impact File</h3>
                     <div id='uploadProgress'></div>
@@ -92,9 +92,9 @@
                         <!-- The text field -->
 
 
-                        <a onclick="exampleMAF()" href="#">
+                        <a onclick="exampleMAF()" href="#" class="link-primary">
                             Try an Example MAF</a><br>
-                        <a onclick="exampleCSV()" href="#">
+                        <a onclick="exampleCSV()" href="#" class="link-primary">
                             Try an Example Mutational Spectrum</a>
 
                         <input type="text" id="fileURL" onchange="reactivateProcessFileButton()"/>
@@ -113,9 +113,9 @@
                     <input type="button" name="next" class="next action-button" value="Next" />
                 </fieldset>
                 <fieldset>
-                    <button onClick="window.location.reload();" class="reloadButton" title="Reset">
+                    <a onClick="window.location.reload();" class="reloadButton" href="">
                         <img src="./js/reset.svg" class="btn-icon">
-                    </button>
+                    </a>
                     <h2 class="fs-title">Confidence Estimation</h2>
                     <h3 class="fs-subtitle">Visualization of the Sample(s) and training datset through UMAP projections
                     </h3>
@@ -142,12 +142,12 @@
                     <input type="button" name="next" class="next action-button" value="Next" />
                 </fieldset>
                 <fieldset>
-                    <button onClick="window.location.reload();" class="reloadButton" title="Reset">
+                    <a onClick="window.location.reload();" class="reloadButton" href="">
                         <img src="./js/reset.svg" class="btn-icon">
-                    </button>
+                    </a>
                     <div class="container">
 
-                        <h2 class="fs-title">Analyze the results using a machine-learning model</h2>
+                        <h2 class="fs-title">Obtain a Prediction</h2>
                         <h3 class="fs-subtitle">Select the model you want to use</h3>
                         <div class="row justify-content-md-center">
                             <select class="form-select form-select-lg mb-3" aria-label="Default select example"
