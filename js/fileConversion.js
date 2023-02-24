@@ -16,7 +16,6 @@ $("#loadingUMAP").hide();
 function initializeProgressBar() {
   $("#uploadProgress").prop("innerHTML", "");
 
-  
   // Show the progress bar
   $("#uploadProgress").toggle();
 
@@ -433,18 +432,15 @@ function setProcessFileButtonSuccess() {
   }
   $("#successGIF").toggle();
 
-  setTimeout(
-    function() {
-      $("#successGIF").toggle("fast");
-    }, 2000);
-
+  setTimeout(function () {
+    $("#successGIF").toggle("fast");
+  }, 2000);
 }
 
 function reactivateProcessFileButton() {
   var fileButton = $("#processFile");
 
   if (processButtonDisabled) {
-
     $("#processFile").prop("disabled", false);
     $("#processFile").prop("innerHTML", "Process");
 
@@ -654,18 +650,17 @@ function moveProgressBar() {
 }
 
 function fadeAndDestroyDiv(div) {
-    div.css("transition", "opacity 1.25s");
-    div.css("transition-timing-function", "ease-out");
+  div.css("transition", "opacity 1.25s");
+  div.css("transition-timing-function", "ease-out");
 
-    div.css("opacity", "0");
+  div.css("opacity", "0");
 
-    $("#uploadProgress").slideToggle("slow");
-    setTimeout(function() {
-        progressBar.destroy();
-        div.css("opacity", "1");
-    }, 2000);
-  }
-
+  $("#uploadProgress").slideToggle("slow");
+  setTimeout(function () {
+    progressBar.destroy();
+    div.css("opacity", "1");
+  }, 2000);
+}
 
 function formatMatrixForPredictionNN(matrix) {
   // If the input is a dictionary, convert it to an array
@@ -717,9 +712,6 @@ async function generatePredictions() {
   var modelType = type.value;
 
   var predicted_prob = 1;
-
-
-
 
   if (modelType == "1") {
     console.log("neural network model");
@@ -793,12 +785,20 @@ async function generatePredictions() {
   predictionBar = bar;
 
   console.log(predicted_prob);
-  $("#actualOutput").text("Output: " + parseFloat(predicted_prob).toFixed(7));
+
+  let textValue = "Output: " + parseFloat(predicted_prob).toFixed(7);
+
+  var app = document.getElementById("actualOutput");
+
+  var typewriter = new Typewriter(app, {
+    loop: false,
+  });
+
+  typewriter.typeString(textValue).start();
 
   predictionBar.animate(predicted_prob); // Number from 0.0 to 1.0
 
-  if( $("#resultsSection").is(':hidden')){
+  if ($("#resultsSection").is(":hidden")) {
     $("#resultsSection").slideToggle(1000);
-
   }
 }
