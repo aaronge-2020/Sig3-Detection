@@ -47,10 +47,10 @@
     <script>
         let ydf = null;
         YggdrasilDecisionForests().then(function (m) {
-          ydf = m;
-          console.log("The library is loaded and ready to be used!");
+            ydf = m;
+            console.log("The library is loaded and ready to be used!");
         });
-        </script>
+    </script>
 
     <nav class="navbar navbar-dark bg-primary">
         <!-- Navbar content -->
@@ -62,6 +62,8 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-md-offset-3">
             <form id="myForm">
+
+
                 <!-- progressbar -->
                 <ul id="progressbar">
                     <li class="active">File Upload</li>
@@ -70,6 +72,9 @@
                 </ul>
                 <!-- fieldsets -->
                 <fieldset>
+                    <button onClick="window.location.reload();" class="reloadButton">
+                        <img src="./js/reset.svg" class="btn-icon">
+                    </button>
                     <h2 class="fs-title">File Upload</h2>
                     <h3 class="fs-subtitle">Please upload your MSK-Impact File</h3>
                     <div id='uploadProgress'></div>
@@ -81,7 +86,7 @@
 
                         <p class="text-sm-left fs-subtitle-instruction">Select a file from your computer:</p>
 
-                        <input type="file" id="fileInput" />
+                        <input type="file" id="fileInput" onchange="reactivateProcessFileButton()"/>
 
                         <p class="text-sm-left fs-subtitle-instruction">OR Specify a URL:</p>
                         <!-- The text field -->
@@ -92,13 +97,13 @@
                         <a onclick="exampleCSV()" href="#">
                             Try an Example Mutational Spectrum</a>
 
-                        <input type="text" id="fileURL" onchange="parseMAFFromURL(this.value)"/>
+                        <input type="text" id="fileURL" onchange="reactivateProcessFileButton()"/>
 
                         <p class="text-sm-left fs-subtitle">Step 2: Process the file</p>
 
                         <div class="row">
                             <div class="col-12">
-                                <button type="button" class="btn btn-primary ml-auto"
+                                <button type="button" class="btn btn-primary ml-auto" id="processFile"
                                     onclick="loadFile()">Process</button>
                             </div>
 
@@ -108,6 +113,9 @@
                     <input type="button" name="next" class="next action-button" value="Next" />
                 </fieldset>
                 <fieldset>
+                    <button onClick="window.location.reload();" class="reloadButton">
+                        <img src="./js/reset.svg" class="btn-icon">
+                    </button>
                     <h2 class="fs-title">Confidence Estimation</h2>
                     <h3 class="fs-subtitle">Visualization of the Sample(s) and training datset through UMAP projections
                     </h3>
@@ -134,13 +142,16 @@
                     <input type="button" name="next" class="next action-button" value="Next" />
                 </fieldset>
                 <fieldset>
+                    <button onClick="window.location.reload();" class="reloadButton">
+                        <img src="./js/reset.svg" class="btn-icon">
+                    </button>
                     <div class="container">
 
                         <h2 class="fs-title">Analyze the results using a machine-learning model</h2>
                         <h3 class="fs-subtitle">Select the model you want to use</h3>
                         <div class="row justify-content-md-center">
                             <select class="form-select form-select-lg mb-3" aria-label="Default select example"
-                                id="modelSelection">
+                                id="modelSelection" onchange="generatePredictions()">
                                 <option selected>Open this select menu</option>
                                 <option value="1">Neural Network</option>
                                 <option value="2">XGBoost</option>
@@ -162,8 +173,7 @@
 
                     </div>
                     <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                    <input type="button" id="generatePrediction" class="submit action-button" value="Predict"
-                        onclick="generatePredictions()" />
+
                 </fieldset>
             </form>
         </div>

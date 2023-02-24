@@ -6,6 +6,20 @@
     height: 100px;
   }
 
+  .reloadButton {
+    position: absolute;
+    top: 2.5%;
+    right: 2.5%;
+    color: white;
+    background: white;
+    border: 0px solid;
+  }
+  .btn-icon {
+    position: relative;
+
+    height: 25px; /* adjust as needed */
+    width: 25px; /* adjust as needed */
+  }
 
 /*basic reset*/
 * {
@@ -29,6 +43,9 @@ body {
     text-align: center;
     position: relative;
     margin-top: 30px;
+    height:100%;
+    width:100%;
+
 }
 
 #myForm fieldset {

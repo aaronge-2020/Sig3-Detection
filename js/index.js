@@ -42,12 +42,12 @@ $(".next").click(function () {
 	});
 });
 
-$(".previous").click(function () {
-	if (animating) return false;
-	animating = true;
+function previousStep() {
+	if (animating) return false; // Checks if animation is in progress
+	animating = true; // If not, animation is in progress
 
-	current_fs = $(this).parent();
-	previous_fs = $(this).parent().prev();
+	current_fs = $(this).parent(); // Finds the current fieldset
+	previous_fs = $(this).parent().prev(); // Finds the previous fieldset
 
 	//de-activate current step on progressbar
 	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
@@ -75,25 +75,23 @@ $(".previous").click(function () {
 		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
-});
+}
 
 $(".submit").click(function () {
-	return false;
+
+    // prevent the submit button from causing the form to be submitted
+    return false;
 })
 
 function exampleMAF() {
-	
 	 // Copy the text inside the text field
 	 var url = document.getElementById("fileURL");
 	 url.value = 'https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/Example%20Files/Sample%20MAFs/DO224865.maf';
-	 parseMAFFromURL(url.value);
   }
 
 
   function exampleCSV() {
-	
 	// Copy the text inside the text field
 	var url = document.getElementById("fileURL");
 	url.value = 'https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/Example%20Files/Sample%20Mutational%20Spectrum/sample.csv';
-	parseMutSpecFromURL(url.value);
  }
