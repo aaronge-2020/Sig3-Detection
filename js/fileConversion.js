@@ -227,47 +227,28 @@ function convert_mfa_to_mutational_spectrum(parsedData) {
   console.log(maf_file);
 }
 
+// get_sbs_trinucleotide_contexts() returns a list of all possible
+// single base substitution (SBS) trinucleotide contexts. It does this
+// by iterating over all possible base_5, substitution, and base_3
+// values and concatenating the strings together. The resulting list
+// is returned.
+
 function get_sbs_trinucleotide_contexts() {
-  /*
-    Returns a list of trinucleotide context for single base substitutions (SBS)
-    for constructing a COSMIC mutational spectra matrix.
-     :return: a list of SBS trinucleotide contexts.
-    */
-  var nucleotide_bases, sbs_trinucleotide_contexts, substitution_types;
-  sbs_trinucleotide_contexts = new Array();
-  nucleotide_bases = ["A", "C", "G", "T"];
-  substitution_types = ["C>A", "C>G", "C>T", "T>A", "T>C", "T>G"];
+  let sbs_trinucleotide_contexts = [];
 
-  for (
-    var base_5, _pj_c = 0, _pj_a = nucleotide_bases, _pj_b = _pj_a.length;
-    _pj_c < _pj_b;
-    _pj_c += 1
-  ) {
-    base_5 = _pj_a[_pj_c];
-
-    for (
-      var substitution,
-        _pj_f = 0,
-        _pj_d = substitution_types,
-        _pj_e = _pj_d.length;
-      _pj_f < _pj_e;
-      _pj_f += 1
-    ) {
-      substitution = _pj_d[_pj_f];
-
-      for (
-        var base_3, _pj_i = 0, _pj_g = nucleotide_bases, _pj_h = _pj_g.length;
-        _pj_i < _pj_h;
-        _pj_i += 1
-      ) {
-        base_3 = _pj_g[_pj_i];
-        sbs_trinucleotide_contexts.push(`${base_5}[${substitution}]${base_3}`);
+  for (let base_5 of ["A", "C", "G", "T"]) {
+    for (let substitution of ["C>A", "C>G", "C>T", "T>A", "T>C", "T>G"]) {
+      for (let base_3 of ["A", "C", "G", "T"]) {
+        sbs_trinucleotide_contexts.push(
+          `${base_5}[${substitution}]${base_3}`
+        );
       }
     }
   }
 
   return sbs_trinucleotide_contexts;
 }
+
 
 function standardize_substitution(ref_allele, mut_allele) {
   // Define the complementary sequence of the reference and mutated alleles.
