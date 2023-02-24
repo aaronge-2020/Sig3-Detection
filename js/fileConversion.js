@@ -12,13 +12,13 @@ let processButtonDisabled = false;
 
 $("#uploadProgress").hide();
 $("#loadingUMAP").hide();
-$("#results_text").hide();
 
 function initializeProgressBar() {
   $("#uploadProgress").prop("innerHTML", "");
 
+  
   // Show the progress bar
-  $("#uploadProgress").slideDown("slow");
+  $("#uploadProgress").toggle();
 
   // Define the progress bar
   progressBar = new ProgressBar.SemiCircle(uploadProgress, {
@@ -436,7 +436,7 @@ function setProcessFileButtonSuccess() {
   setTimeout(
     function() {
       $("#successGIF").toggle("fast");
-    }, 3000);
+    }, 2000);
 
 }
 
@@ -718,7 +718,8 @@ async function generatePredictions() {
 
   var predicted_prob = 1;
 
-  $("#results_text").show();
+
+
 
   if (modelType == "1") {
     console.log("neural network model");
@@ -790,6 +791,14 @@ async function generatePredictions() {
   bar.text.style.fontSize = "2rem";
 
   predictionBar = bar;
+
   console.log(predicted_prob);
+  $("#actualOutput").text("Output: " + parseFloat(predicted_prob).toFixed(7));
+
   predictionBar.animate(predicted_prob); // Number from 0.0 to 1.0
+
+  if( $("#resultsSection").is(':hidden')){
+    $("#resultsSection").slideToggle(1000);
+
+  }
 }
