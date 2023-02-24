@@ -431,12 +431,20 @@ function setProcessFileButtonSuccess() {
     $("#processFile").addClass("btn-success");
     processButtonDisabled = true;
   }
+  $("#successGIF").toggle();
+
+  setTimeout(
+    function() {
+      $("#successGIF").toggle("fast");
+    }, 3000);
+
 }
 
 function reactivateProcessFileButton() {
   var fileButton = $("#processFile");
 
   if (processButtonDisabled) {
+
     $("#processFile").prop("disabled", false);
     $("#processFile").prop("innerHTML", "Process");
 

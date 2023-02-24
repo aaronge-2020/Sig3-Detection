@@ -86,7 +86,7 @@
 
                         <p class="text-sm-left fs-subtitle-instruction">Select a file from your computer:</p>
 
-                        <input type="file" id="fileInput" onchange="reactivateProcessFileButton()"/>
+                        <input type="file" id="fileInput" onchange="reactivateProcessFileButton()" />
 
                         <p class="text-sm-left fs-subtitle-instruction">OR Specify a URL:</p>
                         <!-- The text field -->
@@ -97,17 +97,24 @@
                         <a onclick="exampleCSV()" href="#" class="link-primary">
                             Try an Example Mutational Spectrum</a>
 
-                        <input type="text" id="fileURL" onchange="reactivateProcessFileButton()"/>
+                        <input type="text" id="fileURL" onchange="reactivateProcessFileButton()" />
 
                         <p class="text-sm-left fs-subtitle">Step 2: Process the file</p>
 
-                        <div class="row">
+                        <div class="row ">
                             <div class="col-12">
-                                <button type="button" class="btn btn-primary ml-auto" id="processFile"
+                                <button type="button" class="btn btn-primary ml-auto mx-auto " id="processFile"
                                     onclick="loadFile()">Process</button>
+
+                                <svg style="display: none; position: absolute; top:10%; margin-left:10px;" class="checkmark" id="successGIF"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                                </svg>
                             </div>
 
                         </div>
+
                     </div>
                     <br>
                     <input type="button" name="next" class="next action-button" value="Next" />
