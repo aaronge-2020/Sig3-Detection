@@ -786,7 +786,7 @@ async function generatePredictions() {
 
   console.log(predicted_prob);
 
-  let textValue = "Output: " + parseFloat(predicted_prob).toFixed(7);
+  let textValue = parseFloat(predicted_prob).toFixed(7);
 
   var app = document.getElementById("actualOutput");
 
