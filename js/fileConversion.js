@@ -15,11 +15,13 @@ $("#loadingUMAP").hide();
 $("#results_text").hide();
 
 function initializeProgressBar() {
+  $("#uploadProgress").prop("innerHTML", "");
+
   // Show the progress bar
   $("#uploadProgress").slideDown("slow");
 
   // Define the progress bar
-  var bar = new ProgressBar.SemiCircle(uploadProgress, {
+  progressBar = new ProgressBar.SemiCircle(uploadProgress, {
     strokeWidth: 6,
     color: "#FFEA82",
     trailColor: "#eee",
@@ -33,25 +35,22 @@ function initializeProgressBar() {
     },
     from: { color: "#FFEA82" },
     to: { color: "#ED6A5A" },
-    step: (state, bar) => {
-      bar.path.setAttribute("stroke", state.color);
-      var value = Math.round(bar.value() * 100);
+    step: (state, progressBar) => {
+      progressBar.path.setAttribute("stroke", state.color);
+      var value = Math.round(progressBar.value() * 100);
       if (value === 0) {
-        bar.setText("");
+        progressBar.setText("");
       } else {
-        bar.setText(value);
+        progressBar.setText(value);
       }
 
-      bar.text.style.color = state.color;
+      progressBar.text.style.color = state.color;
     },
   });
 
   // Set the font family and size of the text that displays the progress bar's value.
-  bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
-  bar.text.style.fontSize = "2rem";
-
-  // Set the global variable
-  progressBar = bar;
+  progressBar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+  progressBar.text.style.fontSize = "2rem";
 }
 
 async function loadNNModel() {
@@ -634,8 +633,9 @@ function moveProgressBar() {
       clearInterval(id);
       setTimeout(function () {
         setProcessFileButtonSuccess();
-        $("#uploadProgress").hide();
-        progressBar.destroy();
+
+        fadeAndDestroyDiv($("#uploadProgress"));
+        // $("#uploadProgress").hide();
       }, 2000);
     } else {
       // otherwise, progress the progress bar
@@ -644,6 +644,16 @@ function moveProgressBar() {
     }
   }
 }
+
+function fadeAndDestroyDiv(div) {
+    div.css("transition", "opacity 2s");
+    div.css("opacity", "0");
+    setTimeout(function() {
+        progressBar.destroy();
+        div.css("opacity", "1");
+    }, 2000);
+  }
+
 
 function formatMatrixForPredictionNN(matrix) {
   // If the input is a dictionary, convert it to an array
@@ -737,6 +747,7 @@ async function generatePredictions() {
   if (predictionBar != null) {
     predictionBar.destroy();
   }
+
   var bar = new ProgressBar.Circle(results, {
     color: "#C70039",
     // This has to be the same size as the maximum width to
