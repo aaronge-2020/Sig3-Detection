@@ -42,14 +42,14 @@ The jupyter notebook `Scripts/Dataset Preprocessing/Consuming and Preparing MSK-
 
 Run through the [scripts](https://github.com/aaronge-2020/Sig3-Detection/tree/master/Scripts/Hyperparameter%20Tuning) in `Scripts/Hyperparameter Tuning/` to retune each machine learning model's hyperparameters. To step up these scripts in a Google Colab environment, you can follow these steps: 
 
-1. Open and make a copy of the corresponding notebook for the model that you want to tune: [Neural Network](https://colab.research.google.com/drive/1ns1MBHhfDWpqFqNLXjO9d5fJTTimdA7Y?usp=sharing), [K-nearest-neighbors](https://colab.research.google.com/drive/1awJSktVhQMPcU7U0hL6ht2mPUrz4N_TG?usp=sharing), [XGBoost](https://colab.research.google.com/drive/1hwMGRqjmRG_7zPVw-i-X9Q_ZTurSliqs). 
+1. Open and make a copy of the corresponding notebook for the model that you want to tune: [Neural Network](https://colab.research.google.com/drive/1ns1MBHhfDWpqFqNLXjO9d5fJTTimdA7Y?usp=sharing), [Nearest-neighbors](https://colab.research.google.com/drive/1awJSktVhQMPcU7U0hL6ht2mPUrz4N_TG?usp=sharing), [XGBoost](https://colab.research.google.com/drive/1hwMGRqjmRG_7zPVw-i-X9Q_ZTurSliqs). 
 2. (Optional) Speed up the training process by enabling GPU usage.
 ![Step 4](https://github.com/aaronge-2020/Sig3-Detection/blob/727a2088613e22edd0e188694c95a9b669618af9/Tutorial%20Gifs/04-Enable%20GPU.gif)
 3. Run the cells in sequential order. 
 
 ### Model Evaluation
 
-The jupyter notebook `Scripts/Main.ipynb` runs 10-fold-cross-validation on each of the four machine-learning models tested: XGBoost, Neural Network, K-nearest-neighbors, and Logistic Regression. This is done to pick out the optimal hyperparameters to use in the deployed models. You can use Google Colab to reproduce the model evaluation by following the steps here:
+The jupyter notebook `Scripts/Main.ipynb` runs 10-fold-cross-validation on each of the four machine-learning models tested: XGBoost, Neural Network, Nearest-neighbors, and Logistic Regression. This is done to pick out the optimal hyperparameters to use in the deployed models. You can use Google Colab to reproduce the model evaluation by following the steps here:
 
 1. Download a copy of this GitHub repository onto your local machine and unzip it.
 ![Step 1](https://github.com/aaronge-2020/Sig3-Detection/blob/10bfcaa47392b6e8f9eb21bc89277f174257cf99/Tutorial%20Gifs/01-Download%20Repo.gif)
@@ -63,7 +63,7 @@ The jupyter notebook `Scripts/Main.ipynb` runs 10-fold-cross-validation on each 
 
 ### Model Deployment 
 
-Each of the four machine-learning models tested (XGBoost, Neural Network, K-nearest-neighbors, and Logistic Regression) is ready for use at the [GitHub pages](https://aaronge-2020.github.io/Sig3-Detection/) website here: https://aaronge-2020.github.io/Sig3-Detection/
+Each of the four machine-learning models tested (XGBoost, Neural Network, Nearest-neighbors, and Logistic Regression) is ready for use at the [GitHub pages](https://aaronge-2020.github.io/Sig3-Detection/) website here: https://aaronge-2020.github.io/Sig3-Detection/
 
 There are three steps outlined in this workflow pipeline: 
 
