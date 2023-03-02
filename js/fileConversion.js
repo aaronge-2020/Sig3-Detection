@@ -796,7 +796,7 @@ async function generatePredictions() {
   var predicted_prob = 1;
 
   if (modelType == "1") {
-    const RELU_model = "./js/Models/NN/model.json";
+    const RELU_model = "./js/Models/ANN_Relu/model.json";
 
     console.log("Relu ANN model");
 

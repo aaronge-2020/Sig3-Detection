@@ -1,14 +1,14 @@
 {
     "format": "layers-model",
-    "generatedBy": "keras v2.8.0",
-    "convertedBy": "TensorFlow.js Converter v3.19.0",
+    "generatedBy": "keras v2.11.0",
+    "convertedBy": "TensorFlow.js Converter v4.2.0",
     "modelTopology": {
-        "keras_version": "2.8.0",
+        "keras_version": "2.11.0",
         "backend": "tensorflow",
         "model_config": {
             "class_name": "Sequential",
             "config": {
-                "name": "sequential_1",
+                "name": "sequential_33",
                 "layers": [
                     {
                         "class_name": "InputLayer",
@@ -21,27 +21,27 @@
                             "dtype": "float32",
                             "sparse": false,
                             "ragged": false,
-                            "name": "flatten_1_input"
+                            "name": "flatten_33_input"
                         }
                     },
                     {
                         "class_name": "Flatten",
                         "config": {
-                            "name": "flatten_1",
+                            "name": "flatten_33",
                             "trainable": true,
+                            "dtype": "float32",
                             "batch_input_shape": [
                                 null,
                                 96,
                                 1
                             ],
-                            "dtype": "float32",
                             "data_format": "channels_last"
                         }
                     },
                     {
                         "class_name": "Dense",
                         "config": {
-                            "name": "dense_2",
+                            "name": "dense_66",
                             "trainable": true,
                             "dtype": "float32",
                             "units": 224,
@@ -77,7 +77,7 @@
                     {
                         "class_name": "Dense",
                         "config": {
-                            "name": "dense_3",
+                            "name": "dense_67",
                             "trainable": true,
                             "dtype": "float32",
                             "units": 1,
@@ -116,7 +116,9 @@
                             "curve": "ROC",
                             "summation_method": "interpolation",
                             "multi_label": false,
-                            "label_weights": null
+                            "num_labels": null,
+                            "label_weights": null,
+                            "from_logits": false
                         }
                     }
                 ]
@@ -146,7 +148,7 @@
             ],
             "weights": [
                 {
-                    "name": "dense_2/kernel",
+                    "name": "dense_66/kernel",
                     "shape": [
                         96,
                         224
@@ -154,14 +156,14 @@
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_2/bias",
+                    "name": "dense_66/bias",
                     "shape": [
                         224
                     ],
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_3/kernel",
+                    "name": "dense_67/kernel",
                     "shape": [
                         224,
                         1
@@ -169,7 +171,7 @@
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_3/bias",
+                    "name": "dense_67/bias",
                     "shape": [
                         1
                     ],
