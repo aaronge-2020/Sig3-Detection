@@ -16,35 +16,35 @@ $("#uploadProgress").hide();
 $("#loadingUMAP").hide();
 
 
-async function train_NN_model(k){
+async function train_NN_model(k) {
   const knn = fetch("https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/MSK_Impact_train/BRCA_MSK_sigminer_wilcoxon_test_p_val_final.csv")
-  .then(response => response.text())
-  .then(csvText => {
-    const lines = csvText.trim().split('\n');
-    const header = lines.shift().split(',');
-    const data = lines.map(line => line.split(','));
-    const result = data.map(row => {
-      const obj = {};
-      header.forEach((key, i) => obj[key] = row[i]);
-      return obj;
+    .then(response => response.text())
+    .then(csvText => {
+      const lines = csvText.trim().split('\n');
+      const header = lines.shift().split(',');
+      const data = lines.map(line => line.split(','));
+      const result = data.map(row => {
+        const obj = {};
+        header.forEach((key, i) => obj[key] = row[i]);
+        return obj;
+      });
+
+      const X = result.map(array => Object.values(array).slice(0, 96).map(value => parseInt(value)));
+      const y = result.map(array => Object.values(array).slice(100, 101).map(value => {
+        if (value == "TRUE") {
+          return 1
+        } else {
+          return 0
+        }
+
+      })[0]);
+
+      const knn = new KNNClassifier(k);
+
+      knn.train(X, y);
+
+      return knn;
     });
-
-    const X = result.map(array => Object.values(array).slice(0, 96).map(value => parseInt(value)));
-    const y = result.map(array => Object.values(array).slice(100, 101).map(value => {
-      if (value =="TRUE"){
-        return 1
-      }else{
-        return 0
-      }
-    
-    })[0]);
-
-    const knn = new KNNClassifier(k);
-
-    knn.train(X, y);
-
-    return knn;
-  });
 
 
   return await knn;
@@ -374,7 +374,7 @@ function loadFile() {
       parseMutSpecFromURL(URLPassed);
     } else {
       fireErrorMessage(
-        "File type must Be .maf for MAF files or .csv for mutational spectra!"
+        "File type must be .maf for MAF files or .csv for mutational spectra!"
       );
       return;
     }
@@ -415,7 +415,8 @@ function loadLocalFile() {
       reader.readAsText(file);
     }
   } else {
-    fireErrorMessage("Improper File Type! File type must be .maf or .csv");
+    fireErrorMessage("File type must be .maf for MAF files or .csv for mutational spectra!"
+    );
     return;
   }
 
@@ -707,15 +708,15 @@ class KNNClassifier {
       }
 
       // Store the predicted class
-      if (0 in classCounts && 1 in classCounts){
-        predictions.push(classCounts[1]/this.k)
-      }else{
+      if (0 in classCounts && 1 in classCounts) {
+        predictions.push(classCounts[1] / this.k)
+      } else {
         predictions.push(predictedClass)
       }
 
-    return predictions;
+      return predictions;
+    }
   }
-}
 
   calculateDistance(x1, x2) {
     let sumSquared = 0;
@@ -807,7 +808,7 @@ async function generatePredictions() {
 
     predicted_prob = NN.predict(data).arraySync()[0][0];
 
-  }  else if (modelType == "2") {
+  } else if (modelType == "2") {
     data = formatMatrixForPredictionXGB(mutSpec);
     let model = await ydf.loadModelFromUrl("./js/Models/XGBoost/model.zip");
     predicted_prob = model.predict(data);
@@ -892,7 +893,7 @@ async function generatePredictions() {
   }
 }
 
-window.onload = async function() {
+window.onload = async function () {
   ten_NN_model = await train_NN_model(10);
   one_NN_model = await train_NN_model(1);
 };
