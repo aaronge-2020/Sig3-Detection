@@ -1,6 +1,5 @@
 const userUpload = document.getElementById("fileInput");
 var reader = new FileReader();
-const MODEL_URL = "./js/Models/NN/model.json";
 var debug = null;
 var progressBar = null;
 var predictionBar = null;
@@ -9,10 +8,47 @@ var mutSpec = {};
 userData = null;
 var mutationalSpectrumMatrix = null;
 let processButtonDisabled = false;
+let ten_NN_model = null;
+let one_NN_model = null;
+
 
 $("#uploadProgress").hide();
 $("#loadingUMAP").hide();
 
+
+async function train_NN_model(k){
+  const knn = fetch("https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/MSK_Impact_train/BRCA_MSK_sigminer_wilcoxon_test_p_val_final.csv")
+  .then(response => response.text())
+  .then(csvText => {
+    const lines = csvText.trim().split('\n');
+    const header = lines.shift().split(',');
+    const data = lines.map(line => line.split(','));
+    const result = data.map(row => {
+      const obj = {};
+      header.forEach((key, i) => obj[key] = row[i]);
+      return obj;
+    });
+
+    const X = result.map(array => Object.values(array).slice(0, 96).map(value => parseInt(value)));
+    const y = result.map(array => Object.values(array).slice(100, 101).map(value => {
+      if (value =="TRUE"){
+        return 1
+      }else{
+        return 0
+      }
+    
+    })[0]);
+
+    const knn = new KNNClassifier(k);
+
+    knn.train(X, y);
+
+    return knn;
+  });
+
+
+  return await knn;
+}
 function initializeProgressBar() {
   $("#uploadProgress").prop("innerHTML", "");
 
@@ -52,7 +88,7 @@ function initializeProgressBar() {
   progressBar.text.style.fontSize = "2rem";
 }
 
-async function loadNNModel() {
+async function loadNNModel(MODEL_URL) {
   const model = await tf.loadLayersModel(MODEL_URL);
   return model;
 }
@@ -224,7 +260,6 @@ function getColor(data) {
 
 function convert_mfa_to_mutational_spectrum(parsedData) {
   maf_file = d3.csvParse(parsedData);
-  console.log(maf_file);
 }
 
 // get_sbs_trinucleotide_contexts() returns a list of all possible
@@ -322,9 +357,8 @@ function standardize_trinucleotide(trinucleotide_ref) {
   // complementary sequence is a pyrimidine. Thus, we can infer the
   // complementary sequence.
   if (purines.includes(trinucleotide_ref[1])) {
-    return `${complement_seq[trinucleotide_ref[2]]}${
-      complement_seq[trinucleotide_ref[1]]
-    }${complement_seq[trinucleotide_ref[0]]}`;
+    return `${complement_seq[trinucleotide_ref[2]]}${complement_seq[trinucleotide_ref[1]]
+      }${complement_seq[trinucleotide_ref[0]]}`;
   } else {
     return trinucleotide_ref;
   }
@@ -551,7 +585,6 @@ async function convertMatrix(data) {
         )}]${threePrime}`
       ).toUpperCase();
 
-      console.log(mutationType, position);
 
       if (
         (variantType == "SNP" || variantType == "single base substitution") &&
@@ -624,11 +657,79 @@ function moveProgressBar() {
       }, 2000);
     } else {
       // otherwise, progress the progress bar
-      console.log(progress);
       progressBar.animate(progress);
     }
   }
 }
+
+class KNNClassifier {
+  constructor(k) {
+    this.k = k;
+    this.X = null;
+    this.y = null;
+  }
+
+  train(X, y) {
+    this.X = X;
+    this.y = y;
+  }
+
+  predict(X) {
+    const predictions = [];
+
+    for (let i = 0; i < X.length; i++) {
+      const distances = [];
+
+      // Calculate distances from the current data point to all training examples
+      for (let j = 0; j < this.X.length; j++) {
+        const distance = this.calculateDistance(X[i], this.X[j]);
+        distances.push([distance, this.y[j]]);
+      }
+
+      // Sort the distances in ascending order
+      distances.sort((a, b) => a[0] - b[0]);
+
+      // Take the first k elements and count the number of occurrences of each class
+      const classCounts = {};
+      for (let j = 0; j < this.k; j++) {
+        const label = distances[j][1];
+        classCounts[label] = classCounts[label] ? classCounts[label] + 1 : 1;
+      }
+
+      // Find the class with the highest count
+      let maxCount = 0;
+      let predictedClass = null;
+      for (const label in classCounts) {
+        if (classCounts[label] > maxCount) {
+          maxCount = classCounts[label];
+          predictedClass = label;
+        }
+      }
+
+      // Store the predicted class
+      if (0 in classCounts && 1 in classCounts){
+        predictions.push(classCounts[1]/this.k)
+      }else{
+        predictions.push(predictedClass)
+      }
+
+    return predictions;
+  }
+}
+
+  calculateDistance(x1, x2) {
+    let sumSquared = 0;
+
+    for (let i = 0; i < x1.length; i++) {
+      const diff = x1[i] - x2[i];
+      sumSquared += diff * diff;
+    }
+
+    return Math.sqrt(sumSquared);
+  }
+}
+
+
 
 function fadeAndDestroyDiv(div) {
   div.css("transition", "opacity 1.25s");
@@ -648,7 +749,7 @@ function formatMatrixForPredictionNN(matrix) {
   matrix = Object.values(matrix);
   // If the input is a 2D array, reshape it to a 3D array
   if (typeof matrix[0].length != "undefined") {
-    data = tf.reshape(matrix, [matrix.length, 96, 1]);
+    data = tf.reshape(matrix, [matrix.length, 96]);
   } else {
     // If the input is a 1D array, reshape it to a 3D array
     data = tf.reshape(matrix, [1, 96, 1]);
@@ -695,26 +796,43 @@ async function generatePredictions() {
   var predicted_prob = 1;
 
   if (modelType == "1") {
-    console.log("neural network model");
+    const RELU_model = "./js/Models/NN/model.json";
+
+    console.log("Relu ANN model");
 
     data = formatMatrixForPredictionNN(mutSpec);
 
-    NN = await loadNNModel();
+    NN = await loadNNModel(RELU_model);
 
     predicted_prob = NN.predict(data).arraySync()[0][0];
   } else if (modelType == "2") {
+
+    const SIGMOID_model = "./js/Models/ANN_Sigmoid/model.json";
+
+    console.log("Sigmoid ANN model");
+
+    data = formatMatrixForPredictionNN(mutSpec);
+
+    NN = await loadNNModel(SIGMOID_model);
+
+    predicted_prob = NN.predict(data).arraySync()[0][0];
+
+  }  else if (modelType == "3") {
     data = formatMatrixForPredictionXGB(mutSpec);
     let model = await ydf.loadModelFromUrl("./js/Models/XGBoost/model.zip");
     predicted_prob = model.predict(data);
-  } else if (modelType == "3") {
-    console.log("KNN model");
-    data = Object.values(mutSpec);
-    var json_knn = await d3.json("./js/Models/knn_algorithm.json");
-    var knn_load = ML.KNN.load(json_knn);
-    predicted_prob = knn_load.predict(data);
   } else if (modelType == "4") {
+    console.log("Nearest Neighbor model");
+    data = Object.values(mutationalSpectrumMatrix).map((value) => parseInt(value));
+    predicted_prob = one_NN_model.predict([data])[0];
+  } else if (modelType == "5") {
+    console.log("10-Nearest Neighbors model");
+    data = Object.values(mutationalSpectrumMatrix).map((value) => parseInt(value));
+    predicted_prob = ten_NN_model.predict([data])[0];
+  }
+  else if (modelType == "6") {
     console.log("LR model");
-    data = Object.values(mutSpec);
+    data = Object.values(mutationalSpectrumMatrix);
     data = new ML.Matrix([data]);
     var json = await $.getJSON("./js/Models/LR.json");
     LR_model = mlLogisticRegression.load(json);
@@ -783,3 +901,8 @@ async function generatePredictions() {
     $("#resultsSection").slideToggle(1000);
   }
 }
+
+window.onload = async function() {
+  ten_NN_model = await train_NN_model(10);
+  one_NN_model = await train_NN_model(1);
+};

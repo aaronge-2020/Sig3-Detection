@@ -161,10 +161,14 @@
                             <select class="form-select form-select-lg mb-3" aria-label="Default select example"
                                 id="modelSelection" onchange="generatePredictions()">
                                 <option selected>Select a Machine Learning Model</option>
-                                <option value="1">ANN (1 Hidden Layer with 228 Neurons)</option>
-                                <option value="2">Gradient Boosted Tree</option>
-                                <option value="3">Nearest Neighbor</option>
-                                <option value="4">Logistic Regression</option>
+                                <option value="1">ANN (RELU 1 Hidden Layer with 228 Neurons)</option>
+                                <option value="2">ANN (Sigmoid 1 Hidden Layer with 228 Neurons)</option>
+
+                                <option value="3">Gradient Boosted Tree</option>
+                                <option value="4">Nearest Neighbor</option>
+                                <option value="5">10-Nearest Neighbor</option>
+
+                                <option value="6">Logistic Regression</option>
                             </select>
                         </div>
                         <div id="resultsSection" style="display: none;">
