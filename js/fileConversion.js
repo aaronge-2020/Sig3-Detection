@@ -415,7 +415,7 @@ function loadLocalFile() {
       reader.readAsText(file);
     }
   } else {
-    fireErrorMessage("No File Type Selected!");
+    fireErrorMessage("Improper File Type! File type must be .maf or .csv");
     return;
   }
 
@@ -796,16 +796,6 @@ async function generatePredictions() {
   var predicted_prob = 1;
 
   if (modelType == "1") {
-    const RELU_model = "./js/Models/ANN_Relu/model.json";
-
-    console.log("Relu ANN model");
-
-    data = formatMatrixForPredictionNN(mutSpec);
-
-    NN = await loadNNModel(RELU_model);
-
-    predicted_prob = NN.predict(data).arraySync()[0][0];
-  } else if (modelType == "2") {
 
     const SIGMOID_model = "./js/Models/ANN_Sigmoid/model.json";
 
@@ -817,20 +807,20 @@ async function generatePredictions() {
 
     predicted_prob = NN.predict(data).arraySync()[0][0];
 
-  }  else if (modelType == "3") {
+  }  else if (modelType == "2") {
     data = formatMatrixForPredictionXGB(mutSpec);
     let model = await ydf.loadModelFromUrl("./js/Models/XGBoost/model.zip");
     predicted_prob = model.predict(data);
-  } else if (modelType == "4") {
+  } else if (modelType == "3") {
     console.log("Nearest Neighbor model");
     data = Object.values(mutationalSpectrumMatrix).map((value) => parseInt(value));
     predicted_prob = one_NN_model.predict([data])[0];
-  } else if (modelType == "5") {
+  } else if (modelType == "4") {
     console.log("10-Nearest Neighbors model");
     data = Object.values(mutationalSpectrumMatrix).map((value) => parseInt(value));
     predicted_prob = ten_NN_model.predict([data])[0];
   }
-  else if (modelType == "6") {
+  else if (modelType == "5") {
     console.log("LR model");
     data = Object.values(mutationalSpectrumMatrix);
     data = new ML.Matrix([data]);

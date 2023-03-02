@@ -86,18 +86,18 @@
 
                         <p class="text-sm-left fs-subtitle-instruction">Select a file from your computer:</p>
 
-                        <input type="file" id="fileInput" onchange="reactivateProcessFileButton()" />
+                        <input type="file" id="fileInput" onchange="reactivateProcessFileButton(); loadFile();" />
 
                         <p class="text-sm-left fs-subtitle-instruction">OR Specify a URL:</p>
                         <!-- The text field -->
 
 
-                        <a onclick="exampleMAF()" href="#" class="link-primary">
+                        <a onclick="exampleMAF(); loadFile();" href="#" class="link-primary">
                             Try an Example MAF</a><br>
-                        <a onclick="exampleCSV()" href="#" class="link-primary">
+                        <a onclick="exampleCSV(); loadFile();" href="#" class="link-primary">
                             Try an Example Mutational Spectrum</a>
 
-                        <input type="text" id="fileURL" onchange="reactivateProcessFileButton()" />
+                        <input type="text" id="fileURL" onchange="reactivateProcessFileButton(); loadFile();" />
 
                         <p class="text-sm-left fs-subtitle">Step 2: Process the file</p>
 
@@ -161,14 +161,13 @@
                             <select class="form-select form-select-lg mb-3" aria-label="Default select example"
                                 id="modelSelection" onchange="generatePredictions()">
                                 <option selected>Select a Machine Learning Model</option>
-                                <option value="1">ANN (RELU 1 Hidden Layer with 228 Neurons)</option>
-                                <option value="2">ANN (Sigmoid 1 Hidden Layer with 228 Neurons)</option>
+                                <option value="1">ANN (Sigmoid 1 Hidden Layer with 228 Neurons)</option>
 
-                                <option value="3">Gradient Boosted Tree</option>
-                                <option value="4">Nearest Neighbor</option>
-                                <option value="5">10-Nearest Neighbor</option>
+                                <option value="2">Gradient Boosted Tree</option>
+                                <option value="3">Nearest Neighbor</option>
+                                <option value="4">10-Nearest Neighbor</option>
 
-                                <option value="6">Logistic Regression</option>
+                                <option value="5">Logistic Regression</option>
                             </select>
                         </div>
                         <div id="resultsSection" style="display: none;">
