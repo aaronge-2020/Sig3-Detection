@@ -1,4 +1,4 @@
-const userUpload = document.getElementById("fileInput");
+const userUpload = $("#fileInput");
 var reader = new FileReader();
 var debug = null;
 var progressBar = null;
@@ -365,6 +365,9 @@ function standardize_trinucleotide(trinucleotide_ref) {
 }
 
 function loadFile() {
+  mutationalSpectrumMatrix = null;
+  userData = null;
+
   let URLPassed = $("#fileURL").val();
   let URLExtension = get_url_extension(URLPassed);
   if (URLPassed != "") {
@@ -384,7 +387,12 @@ function loadFile() {
 }
 
 function loadLocalFile() {
-  const file = userUpload.files[0];
+  mutationalSpectrumMatrix = null;
+  userData = null;
+  reader = new FileReader();
+
+  const file = userUpload.prop('files')[userUpload.prop('files').length - 1];
+
   if (typeof file == "undefined" && userData == null) {
     Swal.fire({
       icon: "error",
@@ -403,14 +411,18 @@ function loadLocalFile() {
     fileName = file.name;
     var fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
   }
-
+  console.log(fileType);
   if (fileType == "csv") {
+
+    //Write a line of code to get rid of all the event listeners on the reader object  
     reader.addEventListener("load", parseCSV, false);
+
     if (file) {
       reader.readAsText(file);
     }
   } else if (fileType == "maf") {
     reader.addEventListener("load", parseMAF, false);
+
     if (file) {
       reader.readAsText(file);
     }
@@ -427,6 +439,7 @@ function loadLocalFile() {
     }
     convertMatrix(userData);
   }
+
 }
 
 function setProcessFileButtonSuccess() {
@@ -483,6 +496,7 @@ function parseCSV() {
 }
 
 function parseMAF() {
+
   // parse the data from the reader
   var data = d3.tsvParse(reader.result);
   userData = data;
@@ -813,15 +827,11 @@ async function generatePredictions() {
     let model = await ydf.loadModelFromUrl("./js/Models/XGBoost/model.zip");
     predicted_prob = model.predict(data);
   } else if (modelType == "3") {
-    console.log("Nearest Neighbor model");
-    data = Object.values(mutationalSpectrumMatrix).map((value) => parseInt(value));
-    predicted_prob = one_NN_model.predict([data])[0];
-  } else if (modelType == "4") {
     console.log("10-Nearest Neighbors model");
     data = Object.values(mutationalSpectrumMatrix).map((value) => parseInt(value));
     predicted_prob = ten_NN_model.predict([data])[0];
   }
-  else if (modelType == "5") {
+  else if (modelType == "4") {
     console.log("LR model");
     data = Object.values(mutationalSpectrumMatrix);
     data = new ML.Matrix([data]);
