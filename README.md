@@ -51,15 +51,11 @@ Run through the [scripts](https://github.com/aaronge-2020/Sig3-Detection/tree/ma
 
 The jupyter notebook `Scripts/Main.ipynb` runs 10-fold-cross-validation on each of the four machine-learning models tested: XGBoost, Neural Network, Nearest-neighbors, and Logistic Regression. This is done to pick out the optimal hyperparameters to use in the deployed models. You can use Google Colab to reproduce the model evaluation by following the steps here:
 
-1. Download a copy of this GitHub repository onto your local machine and unzip it.
-![Step 1](https://github.com/aaronge-2020/Sig3-Detection/blob/10bfcaa47392b6e8f9eb21bc89277f174257cf99/Tutorial%20Gifs/01-Download%20Repo.gif)
-2. Open and make a copy of this [Google Colab Notebook](https://colab.research.google.com/drive/14JfdfWqpCIIms5PRy8y0haEK-epjKRTv?usp=sharing)
+1. Open and make a copy of this [Google Colab Notebook](https://colab.research.google.com/drive/14JfdfWqpCIIms5PRy8y0haEK-epjKRTv?usp=sharing)
 ![Step 2](https://github.com/aaronge-2020/Sig3-Detection/blob/2309c5f78e3e0869649fadb13fa2de1f051dddbc/Tutorial%20Gifs/02-Copy%20Notebook.gif)
-4. Navigate to the folder where the github repository is downloaded onto your machine and upload `./Sig3-Detection/-master/Data/train_test_indices.npy` and `./Sig3-Detection/-master/Data/MSK_Impact_train/BRCA_MSK_sigminer_wilcoxon_test_p_val_final.csv` to the Google Colab Notebook. 
-![Step 4](https://github.com/aaronge-2020/Sig3-Detection/blob/2309c5f78e3e0869649fadb13fa2de1f051dddbc/Tutorial%20Gifs/04-Upload%20Files.gif)
-5. (Optional) Speed up the training process by enabling GPU usage.
+2. (Optional) Speed up the training process by enabling GPU usage.
 ![Step 5](https://github.com/aaronge-2020/Sig3-Detection/blob/727a2088613e22edd0e188694c95a9b669618af9/Tutorial%20Gifs/04-Enable%20GPU.gif)
-6. Run the cells in sequential order. 
+3. Run the cells in sequential order. 
 
 ### Model Deployment 
 
