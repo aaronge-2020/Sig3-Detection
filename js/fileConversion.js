@@ -11,33 +11,41 @@ let processButtonDisabled = false;
 let ten_NN_model = null;
 let one_NN_model = null;
 
-
 $("#uploadProgress").hide();
 $("#loadingUMAP").hide();
 
-
 async function train_NN_model(k) {
-  const knn = fetch("https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/MSK_Impact_train/BRCA_MSK_sigminer_wilcoxon_test_p_val_final.csv")
-    .then(response => response.text())
-    .then(csvText => {
-      const lines = csvText.trim().split('\n');
-      const header = lines.shift().split(',');
-      const data = lines.map(line => line.split(','));
-      const result = data.map(row => {
+  const knn = fetch(
+    "https://raw.githubusercontent.com/aaronge-2020/Sig3-Detection/master/Data/MSK_Impact_train/BRCA_MSK_sigminer_wilcoxon_test_p_val_final.csv"
+  )
+    .then((response) => response.text())
+    .then((csvText) => {
+      const lines = csvText.trim().split("\n");
+      const header = lines.shift().split(",");
+      const data = lines.map((line) => line.split(","));
+      const result = data.map((row) => {
         const obj = {};
-        header.forEach((key, i) => obj[key] = row[i]);
+        header.forEach((key, i) => (obj[key] = row[i]));
         return obj;
       });
 
-      const X = result.map(array => Object.values(array).slice(0, 96).map(value => parseInt(value)));
-      const y = result.map(array => Object.values(array).slice(100, 101).map(value => {
-        if (value == "TRUE") {
-          return 1
-        } else {
-          return 0
-        }
-
-      })[0]);
+      const X = result.map((array) =>
+        Object.values(array)
+          .slice(0, 96)
+          .map((value) => parseInt(value))
+      );
+      const y = result.map(
+        (array) =>
+          Object.values(array)
+            .slice(100, 101)
+            .map((value) => {
+              if (value == "TRUE") {
+                return 1;
+              } else {
+                return 0;
+              }
+            })[0]
+      );
 
       const knn = new KNNClassifier(k);
 
@@ -45,7 +53,6 @@ async function train_NN_model(k) {
 
       return knn;
     });
-
 
   return await knn;
 }
@@ -274,16 +281,13 @@ function get_sbs_trinucleotide_contexts() {
   for (let base_5 of ["A", "C", "G", "T"]) {
     for (let substitution of ["C>A", "C>G", "C>T", "T>A", "T>C", "T>G"]) {
       for (let base_3 of ["A", "C", "G", "T"]) {
-        sbs_trinucleotide_contexts.push(
-          `${base_5}[${substitution}]${base_3}`
-        );
+        sbs_trinucleotide_contexts.push(`${base_5}[${substitution}]${base_3}`);
       }
     }
   }
 
   return sbs_trinucleotide_contexts;
 }
-
 
 function standardize_substitution(ref_allele, mut_allele) {
   // Define the complementary sequence of the reference and mutated alleles.
@@ -357,8 +361,9 @@ function standardize_trinucleotide(trinucleotide_ref) {
   // complementary sequence is a pyrimidine. Thus, we can infer the
   // complementary sequence.
   if (purines.includes(trinucleotide_ref[1])) {
-    return `${complement_seq[trinucleotide_ref[2]]}${complement_seq[trinucleotide_ref[1]]
-      }${complement_seq[trinucleotide_ref[0]]}`;
+    return `${complement_seq[trinucleotide_ref[2]]}${
+      complement_seq[trinucleotide_ref[1]]
+    }${complement_seq[trinucleotide_ref[0]]}`;
   } else {
     return trinucleotide_ref;
   }
@@ -391,7 +396,7 @@ function loadLocalFile() {
   userData = null;
   reader = new FileReader();
 
-  const file = userUpload.prop('files')[userUpload.prop('files').length - 1];
+  const file = userUpload.prop("files")[userUpload.prop("files").length - 1];
 
   if (typeof file == "undefined" && userData == null) {
     Swal.fire({
@@ -413,8 +418,7 @@ function loadLocalFile() {
   }
   console.log(fileType);
   if (fileType == "csv") {
-
-    //Write a line of code to get rid of all the event listeners on the reader object  
+    //Write a line of code to get rid of all the event listeners on the reader object
     reader.addEventListener("load", parseCSV, false);
 
     if (file) {
@@ -427,7 +431,8 @@ function loadLocalFile() {
       reader.readAsText(file);
     }
   } else {
-    fireErrorMessage("File type must be .maf for MAF files or .csv for mutational spectra!"
+    fireErrorMessage(
+      "File type must be .maf for MAF files or .csv for mutational spectra!"
     );
     return;
   }
@@ -439,7 +444,6 @@ function loadLocalFile() {
     }
     convertMatrix(userData);
   }
-
 }
 
 function setProcessFileButtonSuccess() {
@@ -496,7 +500,6 @@ function parseCSV() {
 }
 
 function parseMAF() {
-
   // parse the data from the reader
   var data = d3.tsvParse(reader.result);
   userData = data;
@@ -571,66 +574,58 @@ async function parseMutSpecFromURL(URL) {
 }
 
 async function convertMatrix(data) {
-
   var mutationalSpectrum = init_sbs_mutational_spectra();
   initializeProgressBar();
   moveProgressBar();
 
-  for (let i = 0; i < data.length; i++) {
-    var chromosomeNumber = data[i]["Chromosome"];
-    var referenceAllele = data[i]["Reference_Allele"];
-    var mutatedTo = data[i]["Tumor_Seq_Allele2"];
-    // Start Position is the same as end position, since these are SBS mutations
-    var position = data[i]["Start_Position"];
-    var variantType = data[i]["Variant_Type"];
-
+  var promises = data.map(async (d) => {
+    var chromosomeNumber = d["Chromosome"];
+    var position = parseInt(d["Start_Position"]);
     try {
-      var sequence = await getMutationalContext(
-        chromosomeNumber,
-        parseInt(position)
-      );
+      var sequence = await getMutationalContext(chromosomeNumber, position);
       sequence = standardize_trinucleotide(sequence);
-      fivePrime = sequence[0];
-      threePrime = sequence[2];
-      mutationType = String(
-        `${fivePrime}[${standardize_substitution(
-          referenceAllele,
-          mutatedTo
-        )}]${threePrime}`
-      ).toUpperCase();
-
-
+      var fivePrime = sequence[0];
+      var threePrime = sequence[2];
+      var referenceAllele = d["Reference_Allele"];
+      var mutatedTo = d["Tumor_Seq_Allele2"];
+      var mutationType = `${fivePrime}[${standardize_substitution(
+        referenceAllele,
+        mutatedTo
+      )}]${threePrime}`.toUpperCase();
       if (
-        (variantType == "SNP" || variantType == "single base substitution") &&
-        !mutationType.includes("N") &&
-        !mutationType.includes("U")
+        d["Variant_Type"] == "SNP" ||
+        d["Variant_Type"] == "single base substitution"
       ) {
-        mutationalSpectrum[mutationType] =
-          Number(mutationalSpectrum[mutationType]) + Number(1);
-
-        progress = (i + 1) / data.length;
-
-        if (progress > 0.95) {
-          progress = 1;
+        if (!mutationType.includes("N") && !mutationType.includes("U")) {
+          mutationalSpectrum[mutationType] += 1;
         }
       }
     } catch (error) {
       console.error(error);
     }
-  }
+  });
+
+  await Promise.all(promises);
+  progress = 1;
+
   mutationalSpectrumMatrix = mutationalSpectrum;
+  return mutationalSpectrumMatrix;
 }
+
 async function getMutationalContext(chromosomeNumber, startPosition) {
   const chrName = String(chromosomeNumber);
   const startByte = startPosition - 2;
   const endByte = startPosition;
 
-
-  const alternative = await (await fetch(`https://api.genome.ucsc.edu/getData/sequence?genome=hg19;chrom=chr${chrName};start=${startByte};end=${endByte + 1}`)).json();
+  const alternative = await (
+    await fetch(
+      `https://api.genome.ucsc.edu/getData/sequence?genome=hg19;chrom=chr${chrName};start=${startByte};end=${
+        endByte + 1
+      }`
+    )
+  ).json();
 
   const sequence = alternative.dna;
-
-
   return sequence;
 }
 function get_url_extension(url) {
@@ -709,9 +704,9 @@ class KNNClassifier {
 
       // Store the predicted class
       if (0 in classCounts && 1 in classCounts) {
-        predictions.push(classCounts[1] / this.k)
+        predictions.push(classCounts[1] / this.k);
       } else {
-        predictions.push(predictedClass)
+        predictions.push(predictedClass);
       }
 
       return predictions;
@@ -729,8 +724,6 @@ class KNNClassifier {
     return Math.sqrt(sumSquared);
   }
 }
-
-
 
 function fadeAndDestroyDiv(div) {
   div.css("transition", "opacity 1.25s");
@@ -797,7 +790,6 @@ async function generatePredictions() {
   var predicted_prob = 1;
 
   if (modelType == "1") {
-
     const SIGMOID_model = "./js/Models/ANN_Sigmoid/model.json";
 
     console.log("Sigmoid ANN model");
@@ -807,17 +799,17 @@ async function generatePredictions() {
     NN = await loadNNModel(SIGMOID_model);
 
     predicted_prob = NN.predict(data).arraySync()[0][0];
-
   } else if (modelType == "2") {
     data = formatMatrixForPredictionXGB(mutSpec);
     let model = await ydf.loadModelFromUrl("./js/Models/XGBoost/model.zip");
     predicted_prob = model.predict(data);
   } else if (modelType == "3") {
     console.log("10-Nearest Neighbors model");
-    data = Object.values(mutationalSpectrumMatrix).map((value) => parseInt(value));
+    data = Object.values(mutationalSpectrumMatrix).map((value) =>
+      parseInt(value)
+    );
     predicted_prob = ten_NN_model.predict([data])[0];
-  }
-  else if (modelType == "4") {
+  } else if (modelType == "4") {
     console.log("LR model");
     data = Object.values(mutationalSpectrumMatrix);
     data = new ML.Matrix([data]);
