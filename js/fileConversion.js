@@ -571,7 +571,6 @@ async function parseMutSpecFromURL(URL) {
 }
 
 async function convertMatrix(data) {
-  var elem = document.getElementById("myBar");
 
   var mutationalSpectrum = init_sbs_mutational_spectra();
   initializeProgressBar();
@@ -626,26 +625,13 @@ async function getMutationalContext(chromosomeNumber, startPosition) {
   const startByte = startPosition - 2;
   const endByte = startPosition;
 
-  const msg = await (
-    await fetch(
-      // This is the URL for the sequence.bin file
-      `https://storage.googleapis.com/storage/v1/b/chaos-game-representation-grch37/o/chr${chrName}%2Fsequence.bin?alt=media`,
-      {
-        headers: {
-          "Content-Type": "application/octet-stream",
-          Range: `bytes=${startByte}-${endByte}`,
-        },
-      }
-    )
-  ).arrayBuffer();
-  const view = new DataView(msg);
 
-  let seq = "";
-  for (let i = 0; i < view.byteLength; i++) {
-    seq += String.fromCharCode(view.getUint8(i));
-  }
+  const alternative = await (await fetch(`https://api.genome.ucsc.edu/getData/sequence?genome=hg19;chrom=chr${chrName};start=${startByte};end=${endByte + 1}`)).json();
 
-  return seq;
+  const sequence = alternative.dna;
+
+
+  return sequence;
 }
 function get_url_extension(url) {
   return url
