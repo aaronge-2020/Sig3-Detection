@@ -610,13 +610,14 @@ async function convertMatrix(data, batch_size = 100) {
     await Promise.all(promises.slice(promises.length - batch_size, promises.length));
   }
 
-  moveProgressBar(1);
+  if (i < data.length){
+    moveProgressBar(1);
+  }
 
 
   mutationalSpectrumMatrix = mutationalSpectrum;
   return mutationalSpectrumMatrix;
 }
-
 
 async function getMutationalContext(chromosomeNumber, startPosition) {
   const chrName = String(chromosomeNumber);
@@ -634,6 +635,7 @@ async function getMutationalContext(chromosomeNumber, startPosition) {
   const sequence = alternative.dna;
   return sequence;
 }
+
 function get_url_extension(url) {
   return url
     .split(/[#?]/)[0] // remove everything from the first # or ? character
@@ -644,20 +646,24 @@ function get_url_extension(url) {
 
 // create a function to move the progress bar
 function moveProgressBar(progress) {
-    // if the progress is 100%
-    if (progress == 1.0) {
-      // set the progress bar to 100% and hide it after 2 seconds
-      progressBar.animate(progress, function () {
-        setProcessFileButtonSuccess();
 
-        setTimeout(function () {
-          fadeAndDestroyDiv($("#uploadProgress"));
-        }, 2000);
-      });
-    } else {
-      // otherwise, progress the progress bar
-      progressBar.animate(progress);
-    }
+  if (progress > 1) progress = 1;
+
+  // if the progress is 100%
+  if (progress == 1.0) {
+    // set the progress bar to 100% and hide it after 2 seconds
+    progressBar.animate(progress, function () {
+      setProcessFileButtonSuccess();
+      progressBar.set(progress);
+
+      setTimeout(function () {
+        fadeAndDestroyDiv($("#uploadProgress"));
+      }, 2000);
+    });
+  } else {
+    // otherwise, progress the progress bar
+    progressBar.animate(progress);
+  }
 }
 
 class KNNClassifier {
