@@ -3,7 +3,6 @@ var reader = new FileReader();
 var debug = null;
 var progressBar = null;
 var predictionBar = null;
-var progress = 0;
 var mutSpec = {};
 userData = null;
 var mutationalSpectrumMatrix = null;
@@ -573,49 +572,9 @@ async function parseMutSpecFromURL(URL) {
   setProcessFileButtonSuccess();
 }
 
-// async function convertMatrix(data) {
-//   var mutationalSpectrum = init_sbs_mutational_spectra();
-//   initializeProgressBar();
-//   moveProgressBar();
-
-//   var promises = data.map(async (d) => {
-//     var chromosomeNumber = d["Chromosome"];
-//     var position = parseInt(d["Start_Position"]);
-//     try {
-//       var sequence = await getMutationalContext(chromosomeNumber, position);
-//       sequence = standardize_trinucleotide(sequence);
-//       var fivePrime = sequence[0];
-//       var threePrime = sequence[2];
-//       var referenceAllele = d["Reference_Allele"];
-//       var mutatedTo = d["Tumor_Seq_Allele2"];
-//       var mutationType = `${fivePrime}[${standardize_substitution(
-//         referenceAllele,
-//         mutatedTo
-//       )}]${threePrime}`.toUpperCase();
-//       if (
-//         d["Variant_Type"] == "SNP" ||
-//         d["Variant_Type"] == "single base substitution"
-//       ) {
-//         if (!mutationType.includes("N") && !mutationType.includes("U")) {
-//           mutationalSpectrum[mutationType] += 1;
-//         }
-//       }
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   });
-
-//   await Promise.all(promises);
-//   progress = 1;
-
-//   mutationalSpectrumMatrix = mutationalSpectrum;
-//   return mutationalSpectrumMatrix;
-// }
-
-async function convertMatrix(data, batch_size = 50) {
+async function convertMatrix(data, batch_size = 100) {
   var mutationalSpectrum = init_sbs_mutational_spectra();
   initializeProgressBar();
-  moveProgressBar();
 
   var promises = [];
   var i = 0;
@@ -647,10 +606,12 @@ async function convertMatrix(data, batch_size = 50) {
     });
     promises = promises.concat(promiseChunk);
     i += batch_size;
+    moveProgressBar(i / data.length);
     await Promise.all(promises.slice(promises.length - batch_size, promises.length));
   }
 
-  progress = 1;
+  moveProgressBar(1);
+
 
   mutationalSpectrumMatrix = mutationalSpectrum;
   return mutationalSpectrumMatrix;
@@ -682,25 +643,21 @@ function get_url_extension(url) {
 }
 
 // create a function to move the progress bar
-function moveProgressBar() {
-  // create an interval
-  var id = setInterval(frame, 1000);
-  function frame() {
-    // if the progress has reached 1.0, finish the progress bar
+function moveProgressBar(progress) {
+    // if the progress is 100%
     if (progress == 1.0) {
-      progressBar.animate(progress);
-      clearInterval(id);
-      setTimeout(function () {
+      // set the progress bar to 100% and hide it after 2 seconds
+      progressBar.animate(progress, function () {
         setProcessFileButtonSuccess();
 
-        fadeAndDestroyDiv($("#uploadProgress"));
-        // $("#uploadProgress").hide();
-      }, 2000);
+        setTimeout(function () {
+          fadeAndDestroyDiv($("#uploadProgress"));
+        }, 2000);
+      });
     } else {
       // otherwise, progress the progress bar
       progressBar.animate(progress);
     }
-  }
 }
 
 class KNNClassifier {
