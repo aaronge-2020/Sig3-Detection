@@ -573,44 +573,89 @@ async function parseMutSpecFromURL(URL) {
   setProcessFileButtonSuccess();
 }
 
-async function convertMatrix(data) {
+// async function convertMatrix(data) {
+//   var mutationalSpectrum = init_sbs_mutational_spectra();
+//   initializeProgressBar();
+//   moveProgressBar();
+
+//   var promises = data.map(async (d) => {
+//     var chromosomeNumber = d["Chromosome"];
+//     var position = parseInt(d["Start_Position"]);
+//     try {
+//       var sequence = await getMutationalContext(chromosomeNumber, position);
+//       sequence = standardize_trinucleotide(sequence);
+//       var fivePrime = sequence[0];
+//       var threePrime = sequence[2];
+//       var referenceAllele = d["Reference_Allele"];
+//       var mutatedTo = d["Tumor_Seq_Allele2"];
+//       var mutationType = `${fivePrime}[${standardize_substitution(
+//         referenceAllele,
+//         mutatedTo
+//       )}]${threePrime}`.toUpperCase();
+//       if (
+//         d["Variant_Type"] == "SNP" ||
+//         d["Variant_Type"] == "single base substitution"
+//       ) {
+//         if (!mutationType.includes("N") && !mutationType.includes("U")) {
+//           mutationalSpectrum[mutationType] += 1;
+//         }
+//       }
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   });
+
+//   await Promise.all(promises);
+//   progress = 1;
+
+//   mutationalSpectrumMatrix = mutationalSpectrum;
+//   return mutationalSpectrumMatrix;
+// }
+
+async function convertMatrix(data, batch_size = 50) {
   var mutationalSpectrum = init_sbs_mutational_spectra();
   initializeProgressBar();
   moveProgressBar();
 
-  var promises = data.map(async (d) => {
-    var chromosomeNumber = d["Chromosome"];
-    var position = parseInt(d["Start_Position"]);
-    try {
-      var sequence = await getMutationalContext(chromosomeNumber, position);
-      sequence = standardize_trinucleotide(sequence);
-      var fivePrime = sequence[0];
-      var threePrime = sequence[2];
-      var referenceAllele = d["Reference_Allele"];
-      var mutatedTo = d["Tumor_Seq_Allele2"];
-      var mutationType = `${fivePrime}[${standardize_substitution(
-        referenceAllele,
-        mutatedTo
-      )}]${threePrime}`.toUpperCase();
-      if (
-        d["Variant_Type"] == "SNP" ||
-        d["Variant_Type"] == "single base substitution"
-      ) {
-        if (!mutationType.includes("N") && !mutationType.includes("U")) {
-          mutationalSpectrum[mutationType] += 1;
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  });
+  var promises = [];
+  var i = 0;
 
-  await Promise.all(promises);
+  while (i < data.length) {
+    var chunk = data.slice(i, i + batch_size);
+    var promiseChunk = chunk.map(async (d) => {
+      var chromosomeNumber = d["Chromosome"];
+      var position = parseInt(d["Start_Position"]);
+      try {
+        var sequence = await getMutationalContext(chromosomeNumber, position);
+        sequence = standardize_trinucleotide(sequence);
+        var fivePrime = sequence[0];
+        var threePrime = sequence[2];
+        var referenceAllele = d["Reference_Allele"];
+        var mutatedTo = d["Tumor_Seq_Allele2"];
+        var mutationType = `${fivePrime}[${standardize_substitution(          referenceAllele,          mutatedTo        )}]${threePrime}`.toUpperCase();
+        if (
+          d["Variant_Type"] == "SNP" ||
+          d["Variant_Type"] == "single base substitution"
+        ) {
+          if (!mutationType.includes("N") && !mutationType.includes("U")) {
+            mutationalSpectrum[mutationType] += 1;
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+    promises = promises.concat(promiseChunk);
+    i += batch_size;
+    await Promise.all(promises.slice(promises.length - batch_size, promises.length));
+  }
+
   progress = 1;
 
   mutationalSpectrumMatrix = mutationalSpectrum;
   return mutationalSpectrumMatrix;
 }
+
 
 async function getMutationalContext(chromosomeNumber, startPosition) {
   const chrName = String(chromosomeNumber);
