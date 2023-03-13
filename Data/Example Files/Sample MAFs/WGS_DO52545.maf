@@ -1,4 +1,4 @@
-icgc_mutation_id	icgc_donor_id	project_code	chromosome	chromosome_start	chromosome_end	assembly_version	mutation_type	reference_genome_allele	mutated_to_allele
+icgc_mutation_id	icgc_donor_id	project_code	Chromosome	Start_Position	chromosome_end	assembly_version	Variant_Type	Reference_Allele	Tumor_Seq_Allele2
 MU64340260	DO52545	BRCA-UK	1	714051	714051	GRCh37	single base substitution	G	A
 MU63430217	DO52545	BRCA-UK	1	843010	843013	GRCh37	deletion of <=200bp	CTGT	-
 MU64340265	DO52545	BRCA-UK	1	1405471	1405471	GRCh37	single base substitution	C	G
